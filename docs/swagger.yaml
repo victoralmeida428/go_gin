@@ -1,0 +1,162 @@
+definitions:
+  controller.createResponse:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  controller.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controller.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  model.Formulario:
+    properties:
+      ativo:
+        type: boolean
+      descricao:
+        type: string
+      id:
+        type: integer
+      nome:
+        type: string
+    required:
+    - ativo
+    - nome
+    type: object
+  model.User:
+    properties:
+      email:
+        type: string
+      empresa:
+        type: string
+      id:
+        type: integer
+      manager_id:
+        type: integer
+      senha:
+        type: string
+      usuario:
+        type: string
+    required:
+    - senha
+    - usuario
+    type: object
+info:
+  contact: {}
+paths:
+  /api/formulario:
+    get:
+      consumes:
+      - application/json
+      description: Retornar todos os formulários ativos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Formulario'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Formulário
+      tags:
+      - formulario
+    put:
+      consumes:
+      - application/json
+      description: Retornar todos os formulários ativos
+      parameters:
+      - description: Formulário
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Criar Formulário
+      tags:
+      - formulario
+  /api/user:
+    get:
+      consumes:
+      - application/json
+      description: Retornar os dados do usuário logado
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      security:
+      - BearerAuth: []
+      summary: Usuário
+      tags:
+      - user
+  /api/user/create:
+    put:
+      consumes:
+      - application/json
+      description: Criar um novo usuário
+      parameters:
+      - description: Usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Criar Usuário
+      tags:
+      - user
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: Pegar token JWT
+      parameters:
+      - description: Dados de Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.loginResponse'
+      summary: Login
+      tags:
+      - user
+swagger: "2.0"
