@@ -3,12 +3,14 @@ package controller
 import (
 	"abramed_go/model"
 	"abramed_go/repository"
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type userController struct {
-	userUsecase repository.IUserRepository
+	repo *repository.Repository
 }
 
 // GetUser
@@ -26,7 +28,7 @@ func (uc *userController) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := uc.userUsecase.Insert(&user); err != nil {
+	if err := uc.repo.User.Insert(&user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -50,13 +52,50 @@ func (uc *userController) GetUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := uc.userUsecase.FindById(userHeader.(*model.User).ID)
+	user, err := uc.repo.User.FindById(userHeader.(*model.User).ID)
+	user.Senha=""
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, user)
+	members, err := uc.repo.User.FindAllMembers(user.ID)
+	for i := range members {
+		members[i].Senha = ""
+	}
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	groups, err := uc.repo.Variavel.ListGrupamentosByUser(&user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	type membersS struct {
+		model.User
+		Grupos []model.Grupamento `json:"grupos"`
+	} 
+	membersOut := make([]membersS, 0)
+
+	for i := range members {
+		groups, err := uc.repo.Variavel.ListGrupamentosByUser(&members[i])
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		membersOut = append(membersOut, membersS{members[i], groups})
+	}
+
+	if user.ManagerID == nil {
+		ctx.JSON(http.StatusOK, gin.H{"user": user, "members":membersOut})
+		return
+	} 
+
+	ctx.JSON(http.StatusOK, gin.H{"user": membersS{user, groups}, })
+	
 }
 
 type loginRequest struct {
@@ -83,7 +122,7 @@ func (uc *userController) Login(ctx *gin.Context) {
 		return
 	}
 
-	userAuth, err := uc.userUsecase.FindByUsuarioSenha(user.Username, user.Password)
+	userAuth, err := uc.repo.User.FindByUsuarioSenha(user.Username, user.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -95,4 +134,46 @@ func (uc *userController) Login(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, loginResponse{Token: token})
+}
+
+// @Summary Adicionar Grupamento
+// @Description Fazer ligação do usuário com o grupamento
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param login body loginRequest true "Dados de Login"
+// @Success 200 {object} loginResponse
+// @Router /api/user/grupamento [post]
+func (uc *userController) AddGrupamento(ctx *gin.Context) {
+	var input struct {
+		UserID       []int `json:"user_id" binding:"required"`
+		GrupamentoID int `json:"grupamento_id" binding:"required"`
+	}
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	grupo, err := uc.repo.Variavel.FindGrupamentoById(input.GrupamentoID)
+	fmt.Printf("%+v\n",grupo)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	for _, userId := range input.UserID {
+		user, err := uc.repo.User.FindById(userId)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+	
+	
+		err = uc.repo.User.AddGrupamento(&user, grupo)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+	}
+	
+	ctx.JSON(http.StatusOK, gin.H{"message":fmt.Sprintf("Usuários adicionado ao grupo %s", grupo.Nome)})
 }

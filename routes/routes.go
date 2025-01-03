@@ -16,7 +16,8 @@ type Route struct {
 func GenerateRouter(c *controller.Controller, r *gin.Engine) {
 	paths := userRoutes(c)
 	paths = append(paths, formRoutes(c)...)
-	root := "/api"
+	paths = append(paths, variaveisRoutes(c)...)
+	root := "/api/v1"
 	for _, path := range paths {
 		if path.Auth {
 			r.Handle(path.Method, root+path.Path, middlewares.AuthenticationMiddleware, path.Handler)

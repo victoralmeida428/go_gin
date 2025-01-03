@@ -9,7 +9,7 @@ import (
 type User struct {
 	ID        int     `json:"id"`
 	Usuario   string  `json:"usuario" binding:"required"`
-	Senha     string  `json:"senha" binding:"required"`
+	Senha     string  `json:"senha,omitempty" binding:"required"`
 	Email     *string `json:"email"`
 	Empresa   *string `json:"empresa"`
 	ManagerID *int    `json:"manager_id"`

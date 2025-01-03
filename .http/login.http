@@ -1,0 +1,43 @@
+
+@baseUrl = http://victor.controllab.com:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjcxNCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Wjl6HJpAz43VDD47DtxLVmqKK_pSjuhboOAuq-V8bRs
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhZmFlbEBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjE4MywiaWQiOjYsIm1hbmFnZXJfaWQiOjEsInVzdWFyaW8iOiJyYWZhZWwifQ.DzLjIIZkpG-iuGuPP5OdTXAGJ9rJudbY4lKfZacpC04
+# @token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzQGVtYWlsLmNvbSIsImVtcHJlc2EiOiJjb250cm9sbGFiIiwiZXhwIjoxNzM2MDEyNjQzLCJpZCI6NywibWFuYWdlcl9pZCI6MSwidXN1YXJpbyI6Imx1Y2FzIn0.EzD6PfbzzxkPGzWviYsbHslmo-wC4Gw-5LVNSDl8O7Y
+#
+
+POST {{baseUrl}}/user/login
+Content-Type: application/json
+
+{
+    "username": "victor",
+    "password": "teste"
+}
+
+### list
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+
+### create user 
+PUT {{baseUrl}}/user/create
+
+{
+    "usuario": "lucas",
+    "senha": "lucas",
+    "email": "lucas@email.com",
+    "empresa": "controllab",
+    "manager_id": 1
+}
+
+### add group 
+POST {{baseUrl}}/user/grupamento
+Authorization: Bearer {{token}}
+
+{
+   
+   "user_id": [7],
+   "grupamento_id":7
+}
+

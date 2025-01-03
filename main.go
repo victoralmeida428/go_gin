@@ -32,6 +32,5 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	if err = r.Run("victor.controllab.com:8000"); err != nil {
 		panic(err)
-		return
 	}
 }

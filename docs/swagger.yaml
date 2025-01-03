@@ -35,6 +35,24 @@ definitions:
     - ativo
     - nome
     type: object
+  model.Grupamento:
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+    required:
+    - nome
+    type: object
+  model.TipoVariavel:
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+    required:
+    - nome
+    type: object
   model.User:
     properties:
       email:
@@ -52,6 +70,26 @@ definitions:
     required:
     - senha
     - usuario
+    type: object
+  model.Variavel:
+    properties:
+      grupamento_id:
+        type: integer
+      id:
+        type: integer
+      obrigatorio:
+        type: boolean
+      pergunta_id:
+        type: integer
+      possui_item:
+        type: boolean
+      texto:
+        type: string
+      tipo_variavel_id:
+        type: integer
+    required:
+    - texto
+    - tipo_variavel_id
     type: object
 info:
   contact: {}
@@ -72,7 +110,30 @@ paths:
             type: array
       security:
       - BearerAuth: []
-      summary: Formulário
+      summary: Listar Formulário
+      tags:
+      - formulario
+    patch:
+      consumes:
+      - application/json
+      description: Atualiza um usuário
+      parameters:
+      - description: Formulário
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Atualizar Formulário
       tags:
       - formulario
     put:
@@ -96,6 +157,30 @@ paths:
       security:
       - BearerAuth: []
       summary: Criar Formulário
+      tags:
+      - formulario
+  /api/formulario/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta o usuário
+      parameters:
+      - description: Formulário
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletar Formulário
       tags:
       - formulario
   /api/user:
@@ -137,6 +222,28 @@ paths:
       summary: Criar Usuário
       tags:
       - user
+  /api/user/grupamento:
+    post:
+      consumes:
+      - application/json
+      description: Fazer ligação do usuário com o grupamento
+      parameters:
+      - description: Dados de Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.loginResponse'
+      summary: Adicionar Grupamento
+      tags:
+      - user
   /api/user/login:
     post:
       consumes:
@@ -159,4 +266,107 @@ paths:
       summary: Login
       tags:
       - user
+  /api/variaveis:
+    get:
+      consumes:
+      - application/json
+      description: Listar todos as Variaveis
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Variavel'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Listar Variaveis
+      tags:
+      - variaveis
+    put:
+      consumes:
+      - application/json
+      description: Criar somente a variável
+      parameters:
+      - description: Variavel
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Variavel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Criar Variáveis
+      tags:
+      - variaveis
+  /api/variaveis/grupamento:
+    get:
+      consumes:
+      - application/json
+      description: Listar todos os Grupamentos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Grupamento'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Listar Grupamentos
+      tags:
+      - variaveis
+    put:
+      consumes:
+      - application/json
+      description: Criar um grupamento
+      parameters:
+      - description: Grupamento
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Grupamento'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Criar grupamento
+      tags:
+      - variaveis
+  /api/variaveis/tipo:
+    get:
+      consumes:
+      - application/json
+      description: Listar todos tipos de variáveis
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.TipoVariavel'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Listar tipos
+      tags:
+      - variaveis
 swagger: "2.0"

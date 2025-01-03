@@ -25,6 +25,9 @@ func Init(env string) (*sql.DB, error) {
 	}
 
 	err = dotenv.NewDecoder(file).Decode(&dbConf)
+	if err != nil {
+		return nil, err
+	}
 
 	dbdns := fmt.Sprintf("postgres://%s:%s@%s/%s",
 		dbConf.User, dbConf.Pass, dbConf.Host, dbConf.Name,

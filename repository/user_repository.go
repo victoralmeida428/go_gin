@@ -6,12 +6,6 @@ import (
 	"database/sql"
 	"errors"
 )
-
-type IUserRepository interface {
-	IRepository[model.User]
-	FindByUsuarioSenha(usuario, senha string) (model.User, error)
-}
-
 type UserRepository struct {
 	connection *sql.DB
 }
@@ -22,6 +16,27 @@ func (ur *UserRepository) FindAll() ([]model.User, error) {
 	FROM indicadores.usuario
 	`
 	rows, err := ur.connection.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var users []model.User
+	for rows.Next() {
+		var user model.User
+		if err = rows.Scan(&user.ID, &user.Usuario, &user.Senha, &user.Email, &user.ManagerID); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+func (ur *UserRepository) FindAllMembers(id int) ([]model.User, error) {
+	query := `
+	SELECT id, usuario, senha, email, manager_id
+	FROM indicadores.usuario WHERE manager_id = $1
+	`
+	rows, err := ur.connection.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +88,7 @@ func (ur *UserRepository) Insert(user *model.User) error {
 	return err
 }
 
-func (ur *UserRepository) Delete(user *model.User) error { return nil }
+func (ur *UserRepository) Delete(id int) error { return nil }
 
 func (ur *UserRepository) FindByUsuarioSenha(usuario, senha string) (model.User, error) {
 	query := `
@@ -93,8 +108,26 @@ func (ur *UserRepository) FindByUsuarioSenha(usuario, senha string) (model.User,
 
 	}
 	if !helpers.CheckPasswordHash(senha, user.Senha) {
-		return model.User{}, errors.New("Senha inválida")
+		return model.User{}, errors.New("senha inválida")
 	}
 	return user, nil
 
+}
+
+func (ur *UserRepository) AddGrupamento(usuario *model.User, grupo *model.Grupamento) error {
+	tx, err := ur.connection.Begin()
+	if err != nil {
+		return err
+	}
+	query := `
+	INSERT INTO indicadores.grupamento_usuario(usuario_id, grupamento_id)
+	VALUES ($1, $2)
+	`
+	_, err = tx.Exec(query, usuario.ID, grupo.ID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }

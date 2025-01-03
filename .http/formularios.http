@@ -1,0 +1,68 @@
+### CONSTANTES
+@baseUrl = http://victor.controllab.com:8000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTkyNjA0NywiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Yha-LuX_vcIAbthl28IolGcD5N0ZCpo7x3aKYKXRkHs
+
+
+### TODOS OS FORMULÁRIOS
+GET {{baseUrl}}/formulario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### CRIAR UM FORMULÁRIO
+PUT {{baseUrl}}/formulario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "Teste",
+    "descricao": "Descrição do teste",
+    "ativo": true
+}
+
+### DELETAR 1 FORMULARIO
+DELETE {{baseUrl}}/formulario/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### ATIVAR/DESATIVAR 1 FORMULARIO
+PATCH {{baseUrl}}/formulario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": 2,
+    "descricao": ""
+}
+
+
+
+### formularios
+
+[
+    {
+        "id": 1,
+        "nome": "Epidemiológicos",
+        "descricao": "descricao",
+    },
+     {
+        "id": 2,
+        "nome": "Teste",
+        "descricao": "descricao",
+    }
+]
+
+### Agendamentos
+
+[
+    {
+    "id": "int",
+    "id_formulario": "int",
+    "versao_formulario": "int",
+    "user": "string",
+    "periodicidade": "string",
+    "inicio": "date",
+    "unificado": "bool",
+    "ativo": "bool"
+    },
+]

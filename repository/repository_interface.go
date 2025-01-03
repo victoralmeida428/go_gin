@@ -5,5 +5,5 @@ type IRepository[T any] interface {
 	FindById(id int) (T, error)
 	Update(*T) (*T, error)
 	Insert(*T) error
-	Delete(*T) error
+	Delete(int) error
 }

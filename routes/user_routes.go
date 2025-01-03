@@ -24,5 +24,11 @@ func userRoutes(ctl *controller.Controller) []Route {
 			Handler: ctl.User.CreateUser,
 			Auth:    false,
 		},
+		{
+			Path:    "/user/grupamento",
+			Method:  http.MethodPost,
+			Handler: ctl.User.AddGrupamento,
+			Auth:    true,
+		},
 	}
 }

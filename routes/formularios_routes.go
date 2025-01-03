@@ -19,5 +19,17 @@ func formRoutes(ctl *controller.Controller) []Route {
 			Handler: ctl.Form.Create,
 			Auth:    true,
 		},
+		{
+			Path: "/formulario/:id",
+			Method: http.MethodDelete,
+			Handler: ctl.Form.Delete,
+			Auth: true,
+		},
+		{
+			Path: "/formulario",
+			Method: http.MethodPatch,
+			Handler: ctl.Form.Update,
+			Auth: true,
+		},
 	}
 }

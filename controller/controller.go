@@ -7,11 +7,13 @@ import (
 type Controller struct {
 	User *userController
 	Form *formController
+	Variavel *variavelController
 }
 
 func New(repo *repository.Repository) *Controller {
 	return &Controller{
-		User: &userController{userUsecase: repo.User},
-		Form: &formController{formRepo: repo.Formulario},
+		User: &userController{repo: repo},
+		Form: &formController{repo: repo},
+		Variavel: &variavelController{repo: repo},
 	}
 }

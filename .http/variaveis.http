@@ -1,0 +1,45 @@
+### CONSTANTES
+@baseUrl = http://victor.controllab.com:8000/api/v1
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTk5NDgxMCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Po0x0Aa5Oo-Idx54VgUo95g-Sgp239hkvK_rsOi9tg0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhZmFlbEBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjE4MywiaWQiOjYsIm1hbmFnZXJfaWQiOjEsInVzdWFyaW8iOiJyYWZhZWwifQ.DzLjIIZkpG-iuGuPP5OdTXAGJ9rJudbY4lKfZacpC04
+
+
+### tipos
+GET {{baseUrl}}/variaveis/tipo
+Authorization: Bearer {{token}}
+
+### grupamento
+GET {{baseUrl}}/variaveis/grupamento
+Authorization: Bearer {{token}}
+
+### criar grupamento
+PUT {{baseUrl}}/variaveis/grupamento
+Authorization: Bearer {{token}}
+
+{
+    "nome": "RH"
+}
+
+### variaveis
+GET {{baseUrl}}/variaveis
+Authorization: Bearer {{token}}
+
+
+### variaveis
+PUT {{baseUrl}}/variaveis
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "grupamento_id": 6,
+  "obrigatorio": true,
+  "possui_item": false,
+  "texto": "Pergunta1",
+  "tipo_variavel_id": 2
+}
+
+
+### Grupamento
+GET  {{baseUrl}}/grupamento
+Content-Type: application/json
+Authorization: Bearer {{token}}
