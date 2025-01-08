@@ -7,10 +7,10 @@ import (
 
 func TestVerify(t *testing.T) {
 	var (
-		empresa = "empresa"
+		empresa = model.Empresa{ID: 1, Nome: "empresa"}
 		email   = "email@email.com"
 	)
-	user := model.User{ID: 1, Usuario: "victor", Senha: "teste", Empresa: &empresa, Email: &email}
+	user := model.User{ID: 1, Usuario: "victor", Senha: "teste", EmpresaID: &empresa, Email: &email}
 	token, err := user.GerarToken()
 	if err != nil {
 		t.Error(err)

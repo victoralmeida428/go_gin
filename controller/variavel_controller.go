@@ -73,6 +73,7 @@ func (c *variavelController) ListGrupo(ctx *gin.Context){
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	
 	ctx.JSON(http.StatusOK, grupos)
 }
 
@@ -111,12 +112,21 @@ func (c *variavelController) CreateVariavel(ctx *gin.Context){
 func (c *variavelController) ListVariavel(ctx *gin.Context) {
 	variaveis, err := c.repo.Variavel.FindAll()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, variaveis)
 }
 
+
+// @Summary Listar Grupamentos
+// @Description Listar todos os grupamentos existentes
+// @Tags variaveis
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} []model.Grupamento
+// @Router /api/variaveis/grupamento [get]
 func (c *variavelController) ListGrupamentos(ctx *gin.Context) {
 	userHeader, exists := ctx.Get("user")
 	if !exists {
@@ -137,3 +147,4 @@ func (c *variavelController) ListGrupamentos(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, variaveis)
 }
+

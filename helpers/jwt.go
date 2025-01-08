@@ -5,10 +5,11 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
-	"github.com/golang-jwt/jwt/v5"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func GenerateSecretToken() string {
@@ -30,7 +31,7 @@ func VerifyToken(rawToken string) (*model.User, error) {
 	var user model.User
 	token, err := jwt.Parse(RemoveBearerPrefix(rawToken), func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Invalid token")
+			return nil, errors.New("invalid token")
 		}
 		return []byte(secret), nil
 	})
@@ -39,23 +40,10 @@ func VerifyToken(rawToken string) (*model.User, error) {
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		return &user, errors.New("Invalid token")
+		return &user, errors.New("invalid token")
 	}
 
 	id, _ := claims["id"].(float64)
-
-	// Converte "manager_id" para *int
-	var managerID *int
-	if val, ok := claims["manager_id"].(float64); ok {
-		intVal := int(val)
-		managerID = &intVal
-	}
-
-	// Converte "empresa" e "email" para *string
-	var empresa *string
-	if val, ok := claims["empresa"].(string); ok {
-		empresa = &val
-	}
 
 	var email *string
 	if val, ok := claims["email"].(string); ok {
@@ -65,16 +53,11 @@ func VerifyToken(rawToken string) (*model.User, error) {
 	return &model.User{
 		ID:        int(id),
 		Usuario:   claims["usuario"].(string),
-		Empresa:   empresa,
 		Email:     email,
-		ManagerID: managerID,
 	}, nil
 
 }
 
 func RemoveBearerPrefix(token string) string {
-	if strings.HasPrefix(token, "Bearer ") {
-		token = strings.TrimPrefix(token, "Bearer ")
-	}
-	return token
+	return strings.TrimPrefix(token, "Bearer ")
 }

@@ -1,22 +1,24 @@
 
 @baseUrl = http://victor.controllab.com:8000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjcxNCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Wjl6HJpAz43VDD47DtxLVmqKK_pSjuhboOAuq-V8bRs
-# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhZmFlbEBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjE4MywiaWQiOjYsIm1hbmFnZXJfaWQiOjEsInVzdWFyaW8iOiJyYWZhZWwifQ.DzLjIIZkpG-iuGuPP5OdTXAGJ9rJudbY4lKfZacpC04
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjM1MzM5MSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.O3UvRCZA1mxTaz-tGmOj6Ue5WQGGlbhhEY5ULcnFGsY
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoxLCJleHAiOjE3MzYyNzg3OTcsImlkIjoyLCJtYW5hZ2VyX2lkIjoxLCJ1c3VhcmlvIjoiYnJ1bm8ifQ.QugDQGFv_Gkf2yZseZmofzC2ifyZSx86c3_7dYxD9ZE
 # @token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzQGVtYWlsLmNvbSIsImVtcHJlc2EiOiJjb250cm9sbGFiIiwiZXhwIjoxNzM2MDEyNjQzLCJpZCI6NywibWFuYWdlcl9pZCI6MSwidXN1YXJpbyI6Imx1Y2FzIn0.EzD6PfbzzxkPGzWviYsbHslmo-wC4Gw-5LVNSDl8O7Y
 #
 
 POST {{baseUrl}}/user/login
 Content-Type: application/json
+Origin: http://rafaeld-gse.controllab.com:3000/
 
 {
     "username": "victor",
-    "password": "teste"
+    "password": "victor"
 }
 
 ### list
 GET {{baseUrl}}/user
 Authorization: Bearer {{token}}
 Content-Type: application/json
+# Origin: http://rafaeld-gse.controllab.com:3000/
 
 
 
@@ -24,20 +26,35 @@ Content-Type: application/json
 PUT {{baseUrl}}/user/create
 
 {
-    "usuario": "lucas",
-    "senha": "lucas",
-    "email": "lucas@email.com",
-    "empresa": "controllab",
+    "usuario": "luiza",
+    "senha": "luiza",
+    "email": "luiza@email.com",
+    "first_name": "luiza",
+    "last_name": "costa",
+    "empresa_id": 1,
     "manager_id": 1
 }
+
+### list
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
 ### add group 
 POST {{baseUrl}}/user/grupamento
 Authorization: Bearer {{token}}
 
 {
-   
-   "user_id": [7],
-   "grupamento_id":7
+   "user_id": [5],
+   "grupamento_id":1
 }
 
+
+### del group
+DELETE  {{baseUrl}}/user/grupamento
+Authorization: Bearer {{token}}
+
+{
+   "user_id": 5,
+   "grupamento_id":1
+}

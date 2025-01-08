@@ -1,4 +1,26 @@
 definitions:
+  controller.AddGrupamentoInput:
+    properties:
+      grupamento_id:
+        type: integer
+      user_id:
+        items:
+          type: integer
+        type: array
+    required:
+    - grupamento_id
+    - user_id
+    type: object
+  controller.DelGrupamentoInput:
+    properties:
+      grupamento_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - grupamento_id
+    - user_id
+    type: object
   controller.createResponse:
     properties:
       message:
@@ -19,6 +41,15 @@ definitions:
   controller.loginResponse:
     properties:
       token:
+        type: string
+    type: object
+  model.Empresa:
+    properties:
+      id:
+        type: integer
+      nivel:
+        $ref: '#/definitions/model.Nivel'
+      nome:
         type: string
     type: object
   model.Formulario:
@@ -44,6 +75,13 @@ definitions:
     required:
     - nome
     type: object
+  model.Nivel:
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+    type: object
   model.TipoVariavel:
     properties:
       id:
@@ -58,9 +96,17 @@ definitions:
       email:
         type: string
       empresa:
+        $ref: '#/definitions/model.Empresa'
+      first_name:
         type: string
+      grupamentos:
+        items:
+          $ref: '#/definitions/model.Grupamento'
+        type: array
       id:
         type: integer
+      last_name:
+        type: string
       manager_id:
         type: integer
       senha:
@@ -68,13 +114,13 @@ definitions:
       usuario:
         type: string
     required:
+    - first_name
+    - last_name
     - senha
     - usuario
     type: object
   model.Variavel:
     properties:
-      grupamento_id:
-        type: integer
       id:
         type: integer
       obrigatorio:
@@ -86,7 +132,7 @@ definitions:
       texto:
         type: string
       tipo_variavel_id:
-        type: integer
+        $ref: '#/definitions/model.TipoVariavel'
     required:
     - texto
     - tipo_variavel_id
@@ -223,24 +269,49 @@ paths:
       tags:
       - user
   /api/user/grupamento:
-    post:
+    delete:
       consumes:
       - application/json
       description: Fazer ligação do usuário com o grupamento
       parameters:
-      - description: Dados de Login
+      - description: Dados para o grupamento
         in: body
         name: login
         required: true
         schema:
-          $ref: '#/definitions/controller.loginRequest'
+          $ref: '#/definitions/controller.DelGrupamentoInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.loginResponse'
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Remover Grupamento
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Fazer ligação do usuário com o grupamento
+      parameters:
+      - description: Dados para o grupamento
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AddGrupamentoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
       summary: Adicionar Grupamento
       tags:
       - user
@@ -312,7 +383,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Listar todos os Grupamentos
+      description: Listar todos os grupamentos existentes
       produces:
       - application/json
       responses:

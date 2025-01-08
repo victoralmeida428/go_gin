@@ -1,7 +1,7 @@
 ### CONSTANTES
 @baseUrl = http://victor.controllab.com:8000/api/v1
 # @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTk5NDgxMCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Po0x0Aa5Oo-Idx54VgUo95g-Sgp239hkvK_rsOi9tg0
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhZmFlbEBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNjAxMjE4MywiaWQiOjYsIm1hbmFnZXJfaWQiOjEsInVzdWFyaW8iOiJyYWZhZWwifQ.DzLjIIZkpG-iuGuPP5OdTXAGJ9rJudbY4lKfZacpC04
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjM1MzM5MSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.O3UvRCZA1mxTaz-tGmOj6Ue5WQGGlbhhEY5ULcnFGsY
 
 
 ### tipos
@@ -17,7 +17,7 @@ PUT {{baseUrl}}/variaveis/grupamento
 Authorization: Bearer {{token}}
 
 {
-    "nome": "RH"
+    "nome": "Exame"
 }
 
 ### variaveis

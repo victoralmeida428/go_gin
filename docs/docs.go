@@ -223,6 +223,11 @@ const docTemplate = `{
         },
         "/api/user/grupamento": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fazer ligação do usuário com o grupamento",
                 "consumes": [
                     "application/json"
@@ -236,12 +241,12 @@ const docTemplate = `{
                 "summary": "Adicionar Grupamento",
                 "parameters": [
                     {
-                        "description": "Dados de Login",
+                        "description": "Dados para o grupamento",
                         "name": "login",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.loginRequest"
+                            "$ref": "#/definitions/controller.AddGrupamentoInput"
                         }
                     }
                 ],
@@ -249,7 +254,44 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.loginResponse"
+                            "$ref": "#/definitions/controller.createResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Fazer ligação do usuário com o grupamento",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Remover Grupamento",
+                "parameters": [
+                    {
+                        "description": "Dados para o grupamento",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.DelGrupamentoInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.createResponse"
                         }
                     }
                 }
@@ -364,7 +406,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos os Grupamentos",
+                "description": "Listar todos os grupamentos existentes",
                 "consumes": [
                     "application/json"
                 ],
@@ -458,6 +500,39 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controller.AddGrupamentoInput": {
+            "type": "object",
+            "required": [
+                "grupamento_id",
+                "user_id"
+            ],
+            "properties": {
+                "grupamento_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "controller.DelGrupamentoInput": {
+            "type": "object",
+            "required": [
+                "grupamento_id",
+                "user_id"
+            ],
+            "properties": {
+                "grupamento_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "controller.createResponse": {
             "type": "object",
             "required": [
@@ -488,6 +563,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Empresa": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "nivel": {
+                    "$ref": "#/definitions/model.Nivel"
+                },
+                "nome": {
                     "type": "string"
                 }
             }
@@ -527,6 +616,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Nivel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
         "model.TipoVariavel": {
             "type": "object",
             "required": [
@@ -544,6 +644,8 @@ const docTemplate = `{
         "model.User": {
             "type": "object",
             "required": [
+                "first_name",
+                "last_name",
                 "senha",
                 "usuario"
             ],
@@ -552,10 +654,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "empresa": {
+                    "$ref": "#/definitions/model.Empresa"
+                },
+                "first_name": {
                     "type": "string"
+                },
+                "grupamentos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Grupamento"
+                    }
                 },
                 "id": {
                     "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
                 },
                 "manager_id": {
                     "type": "integer"
@@ -575,9 +689,6 @@ const docTemplate = `{
                 "tipo_variavel_id"
             ],
             "properties": {
-                "grupamento_id": {
-                    "type": "integer"
-                },
                 "id": {
                     "type": "integer"
                 },
@@ -594,7 +705,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tipo_variavel_id": {
-                    "type": "integer"
+                    "$ref": "#/definitions/model.TipoVariavel"
                 }
             }
         }
@@ -603,12 +714,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0.0",
-	Host:             "http://victor.controllab.com:8000",
-	BasePath:         "/api/v1",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Controllab :: REST API",
-	Description:      "API for Proficiency Testing and Internal Control integration",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

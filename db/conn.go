@@ -3,9 +3,9 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"github.com/golobby/dotenv"
-	_ "github.com/lib/pq"
 	"os"
+	"strconv"
+	_ "github.com/lib/pq"
 )
 
 type databaseConfig struct {
@@ -19,15 +19,29 @@ type databaseConfig struct {
 func Init(env string) (*sql.DB, error) {
 
 	dbConf := databaseConfig{}
-	file, err := os.Open(env)
-	if err != nil {
-		panic(err)
+	if value := os.Getenv("DB_HOST"); value != "" {
+		dbConf.Host = value
+	} else {
+		dbConf.Host = "localhost"
+	}
+	if value := os.Getenv("DB_NAME"); value != "" {
+		dbConf.Name = value
+	}
+	if value := os.Getenv("DB_PORT"); value != "" {
+		port, _ := strconv.Atoi(value)
+		dbConf.Port = int16(port)
+	} else {
+		dbConf.Port = 5432
 	}
 
-	err = dotenv.NewDecoder(file).Decode(&dbConf)
-	if err != nil {
-		return nil, err
+	if value := os.Getenv("DB_USER"); value != "" {
+		dbConf.User = value
 	}
+
+	if value := os.Getenv("DB_PASS"); value != "" {
+		dbConf.Pass = value
+	}
+	
 
 	dbdns := fmt.Sprintf("postgres://%s:%s@%s/%s",
 		dbConf.User, dbConf.Pass, dbConf.Host, dbConf.Name,

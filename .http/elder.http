@@ -1,0 +1,1 @@
+GET https://intranet-api.controllab.com/intranet/consulta/parcial?ano=2024&segmento=1&part[]=4500&mod[]=365

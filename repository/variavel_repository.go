@@ -9,19 +9,21 @@ type VariavelRepository struct {
 	connection *sql.DB
 }
 
-func (repo *VariavelRepository) FindAll() ([]model.Variavel, error) {
+func (repo *VariavelRepository) FindAll() ([]model.ViewVariavel, error) {
 	query := `
-		SELECT id, grupamento_id, tipo_variavel_id, pergunta_id, possui_item, obrigatorio, texto  FROM indicadores.variavel
+		SELECT variavel.id, tipo_variavel_id, tipo.nome, pergunta, item, possui_item, obrigatorio
+		FROM indicadores.view_variavel variavel
+		JOIN indicadores.tipo_variavel tipo ON tipo.id = tipo_variavel_id
 	`
 	result, err := repo.connection.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer result.Close()
-	variaveis := make([]model.Variavel, 0)
+	variaveis := make([]model.ViewVariavel, 0)
 	for result.Next() {
-		var variavel model.Variavel
-		err = result.Scan(&variavel.ID, &variavel.GrupamentoId, &variavel.TipoVariavel, &variavel.PerguntaId, &variavel.PossuiItem, &variavel.Obrigatorio, &variavel.Texto)
+		var variavel model.ViewVariavel
+		err = result.Scan(&variavel.ID, &variavel.TipoVariavel.ID, &variavel.TipoVariavel.Nome, &variavel.Pergunta, &variavel.Item, &variavel.PossuiItem, &variavel.Obrigatorio)
 		if err != nil {
 			return nil, err
 		}
@@ -49,7 +51,7 @@ func (form *VariavelRepository) Insert(variavel *model.Variavel) error {
 	VALUES ($1, $2, $3, $4, $5, $6)
 	`
 
-	args := []interface{}{variavel.GrupamentoId, variavel.TipoVariavel, variavel.PerguntaId, variavel.PossuiItem, variavel.Obrigatorio, variavel.Texto}
+	args := []interface{}{ variavel.TipoVariavel, variavel.PerguntaId, variavel.PossuiItem, variavel.Obrigatorio, variavel.Texto}
 	_, err := form.connection.Exec(query, args...)
 	if err != nil {
 		return err
@@ -85,7 +87,7 @@ func (form *VariavelRepository) FindGrupamentoById(id int) (*model.Grupamento, e
 	query := `
 	SELECT id, nome FROM indicadores.grupamento WHERE id=$1
 	`
-	
+
 	var grupo model.Grupamento
 	if err := form.connection.QueryRow(query, id).Scan(&grupo.ID, &grupo.Nome); err != nil {
 		return nil, err

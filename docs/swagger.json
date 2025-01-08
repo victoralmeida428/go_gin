@@ -212,6 +212,11 @@
         },
         "/api/user/grupamento": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fazer ligação do usuário com o grupamento",
                 "consumes": [
                     "application/json"
@@ -225,12 +230,12 @@
                 "summary": "Adicionar Grupamento",
                 "parameters": [
                     {
-                        "description": "Dados de Login",
+                        "description": "Dados para o grupamento",
                         "name": "login",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.loginRequest"
+                            "$ref": "#/definitions/controller.AddGrupamentoInput"
                         }
                     }
                 ],
@@ -238,7 +243,44 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.loginResponse"
+                            "$ref": "#/definitions/controller.createResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Fazer ligação do usuário com o grupamento",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Remover Grupamento",
+                "parameters": [
+                    {
+                        "description": "Dados para o grupamento",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.DelGrupamentoInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.createResponse"
                         }
                     }
                 }
@@ -353,7 +395,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos os Grupamentos",
+                "description": "Listar todos os grupamentos existentes",
                 "consumes": [
                     "application/json"
                 ],
@@ -447,6 +489,39 @@
         }
     },
     "definitions": {
+        "controller.AddGrupamentoInput": {
+            "type": "object",
+            "required": [
+                "grupamento_id",
+                "user_id"
+            ],
+            "properties": {
+                "grupamento_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "controller.DelGrupamentoInput": {
+            "type": "object",
+            "required": [
+                "grupamento_id",
+                "user_id"
+            ],
+            "properties": {
+                "grupamento_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "controller.createResponse": {
             "type": "object",
             "required": [
@@ -477,6 +552,20 @@
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Empresa": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "nivel": {
+                    "$ref": "#/definitions/model.Nivel"
+                },
+                "nome": {
                     "type": "string"
                 }
             }
@@ -516,6 +605,17 @@
                 }
             }
         },
+        "model.Nivel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
         "model.TipoVariavel": {
             "type": "object",
             "required": [
@@ -533,6 +633,8 @@
         "model.User": {
             "type": "object",
             "required": [
+                "first_name",
+                "last_name",
                 "senha",
                 "usuario"
             ],
@@ -541,10 +643,22 @@
                     "type": "string"
                 },
                 "empresa": {
+                    "$ref": "#/definitions/model.Empresa"
+                },
+                "first_name": {
                     "type": "string"
+                },
+                "grupamentos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Grupamento"
+                    }
                 },
                 "id": {
                     "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
                 },
                 "manager_id": {
                     "type": "integer"
@@ -564,9 +678,6 @@
                 "tipo_variavel_id"
             ],
             "properties": {
-                "grupamento_id": {
-                    "type": "integer"
-                },
                 "id": {
                     "type": "integer"
                 },
@@ -583,7 +694,7 @@
                     "type": "string"
                 },
                 "tipo_variavel_id": {
-                    "type": "integer"
+                    "$ref": "#/definitions/model.TipoVariavel"
                 }
             }
         }

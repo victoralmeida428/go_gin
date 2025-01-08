@@ -1,0 +1,1 @@
+DROP VIEW indicadores.view_variavel;

@@ -45,8 +45,7 @@ create table if not exists indicadores.grupamento(
 
 create table if not exists indicadores.variavel(
     id serial primary key,
-    grupamento_id integer references indicadores.grupamento(id) not null,
-    tipo_variavel_id integer references indicadores.tipo_variavel(id) not null,
+    tipo_variavel_id integer references indicadores.tipo_variavel(id),
     pergunta_id integer references indicadores.variavel(id),
     possui_item bool not null,
     obrigatorio bool not null,
@@ -60,5 +59,3 @@ create table if not exists indicadores.variavel_formulario(
 );
 
 COMMIT;
-
-

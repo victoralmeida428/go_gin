@@ -3,13 +3,21 @@ package model
 import "time"
 
 type Variavel struct {
-	ID           int    `json:"id"`
-	GrupamentoId *int   `json:"grupamento_id,omitempty"`
-	TipoVariavel int    `json:"tipo_variavel_id" binding:"required"`
-	PerguntaId   *int   `json:"pergunta_id,omitempty"`
-	PossuiItem   bool   `json:"possui_item"`
-	Obrigatorio  bool   `json:"obrigatorio"`
-	Texto        string `json:"texto" binding:"required"`
+	ID           int          `json:"id"`
+	TipoVariavel TipoVariavel `json:"tipo_variavel_id" binding:"required"`
+	PerguntaId   *int         `json:"pergunta_id,omitempty"`
+	PossuiItem   bool         `json:"possui_item"`
+	Obrigatorio  bool         `json:"obrigatorio"`
+	Texto        string       `json:"texto" binding:"required"`
+}
+
+type ViewVariavel struct {
+	ID           int          `json:"id"`
+	TipoVariavel TipoVariavel `json:"tipo_variavel_id" binding:"required"`
+	Pergunta     string      `json:"pergunta,omitempty"`
+	Item         *string      `json:"item,omitempty"`
+	PossuiItem   bool         `json:"possui_item"`
+	Obrigatorio  bool         `json:"obrigatorio"`
 }
 
 type TipoVariavel struct {
@@ -18,10 +26,10 @@ type TipoVariavel struct {
 }
 
 type VersaoVariavel struct {
-	ID           int       `json:"id"`
-	FormularioId int       `json:"formulario_id" binding:"required"`
-	Versao       int       `json:"versao" binding:"required"`
-	CriadoEm     time.Time `json:"criado_em" binding:"required"`
+	ID           int        `json:"id"`
+	FormularioId Formulario `json:"formulario_id,omitempty" binding:"required"`
+	Versao       int        `json:"versao,omitempty" binding:"required"`
+	CriadoEm     time.Time  `json:"criado_em,omitempty" binding:"required"`
 }
 
 type Grupamento struct {

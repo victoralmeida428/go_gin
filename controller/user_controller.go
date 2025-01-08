@@ -23,11 +23,25 @@ type userController struct {
 // @Success 200 {object} model.User
 // @Router /api/user/create [put]
 func (uc *userController) CreateUser(ctx *gin.Context) {
-	var user model.User
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	var input struct {
+		model.User
+		Empresa int `json:"empresa_id" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	user := model.User{
+		Usuario:   input.Usuario,
+		Senha:     input.Senha,
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		Email:     input.Email,
+		ManagerID: input.ManagerID,
+		EmpresaID: &model.Empresa{ID: input.Empresa},
+	}
+
 	if err := uc.repo.User.Insert(&user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -53,7 +67,7 @@ func (uc *userController) GetUser(ctx *gin.Context) {
 	}
 
 	user, err := uc.repo.User.FindById(userHeader.(*model.User).ID)
-	user.Senha=""
+	user.Senha = ""
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -69,16 +83,13 @@ func (uc *userController) GetUser(ctx *gin.Context) {
 	}
 
 	groups, err := uc.repo.Variavel.ListGrupamentosByUser(&user)
+	user.Grupamentos = groups
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	type membersS struct {
-		model.User
-		Grupos []model.Grupamento `json:"grupos"`
-	} 
-	membersOut := make([]membersS, 0)
+	membersOut := make([]model.User, 0)
 
 	for i := range members {
 		groups, err := uc.repo.Variavel.ListGrupamentosByUser(&members[i])
@@ -86,16 +97,12 @@ func (uc *userController) GetUser(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		membersOut = append(membersOut, membersS{members[i], groups})
+		members[i].Grupamentos = groups
+		membersOut = append(membersOut, members[i])
 	}
 
-	if user.ManagerID == nil {
-		ctx.JSON(http.StatusOK, gin.H{"user": user, "members":membersOut})
-		return
-	} 
+	ctx.JSON(http.StatusOK, gin.H{"user": user, "members": membersOut})
 
-	ctx.JSON(http.StatusOK, gin.H{"user": membersS{user, groups}, })
-	
 }
 
 type loginRequest struct {
@@ -136,44 +143,79 @@ func (uc *userController) Login(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, loginResponse{Token: token})
 }
 
+type AddGrupamentoInput struct {
+	UserID       []int `json:"user_id" binding:"required"`
+	GrupamentoID int   `json:"grupamento_id" binding:"required"`
+}
+
 // @Summary Adicionar Grupamento
 // @Description Fazer ligação do usuário com o grupamento
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param login body loginRequest true "Dados de Login"
-// @Success 200 {object} loginResponse
+// @Security BearerAuth
+// @Param login body AddGrupamentoInput true "Dados para o grupamento"
+// @Success 200 {object} createResponse
 // @Router /api/user/grupamento [post]
 func (uc *userController) AddGrupamento(ctx *gin.Context) {
 	var input struct {
 		UserID       []int `json:"user_id" binding:"required"`
+		GrupamentoID int   `json:"grupamento_id" binding:"required"`
+	}
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	grupo, err := uc.repo.Variavel.FindGrupamentoById(input.GrupamentoID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	for _, userId := range input.UserID {
+		user, err := uc.repo.User.FindById(userId)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = uc.repo.User.AddGrupamento(&user, grupo)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Usuários adicionado ao grupo %s", grupo.Nome)})
+}
+
+type DelGrupamentoInput struct {
+	UserID       int `json:"user_id" binding:"required"`
+	GrupamentoID int `json:"grupamento_id" binding:"required"`
+}
+
+// @Summary Remover Grupamento
+// @Description Fazer ligação do usuário com o grupamento
+// @Tags user
+// @Accept json
+// @Security BearerAuth
+// @Produce json
+// @Param login body DelGrupamentoInput true "Dados para o grupamento"
+// @Success 200 {object} createResponse
+// @Router /api/user/grupamento [delete]
+func (uc *userController) DelGrupamento(ctx *gin.Context) {
+	var input struct {
+		UserID       int `json:"user_id" binding:"required"`
 		GrupamentoID int `json:"grupamento_id" binding:"required"`
 	}
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
-	grupo, err := uc.repo.Variavel.FindGrupamentoById(input.GrupamentoID)
-	fmt.Printf("%+v\n",grupo)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err)
+
+	if err := uc.repo.User.DeleteGroup(input.GrupamentoID, input.UserID); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	for _, userId := range input.UserID {
-		user, err := uc.repo.User.FindById(userId)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err)
-			return
-		}
-	
-	
-		err = uc.repo.User.AddGrupamento(&user, grupo)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err)
-			return
-		}
-	}
-	
-	ctx.JSON(http.StatusOK, gin.H{"message":fmt.Sprintf("Usuários adicionado ao grupo %s", grupo.Nome)})
+
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Usuário %d removidos do grupo %d", input.UserID, input.GrupamentoID)})
 }
