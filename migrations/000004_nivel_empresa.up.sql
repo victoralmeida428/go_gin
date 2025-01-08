@@ -26,7 +26,6 @@ ALTER TABLE indicadores.usuario  DROP COLUMN empresa;
 
 ALTER TABLE indicadores.usuario ADD COLUMN empresa_id INTEGER REFERENCES indicadores.empresa(id);
 
-ALTER TABLE indicadores.agendamento ADD COLUMN empresa_id INTEGER REFERENCES indicadores.empresa(id);
 ALTER TABLE indicadores.formulario ADD COLUMN nivel_id INTEGER REFERENCES indicadores.nivel(id);
 
 

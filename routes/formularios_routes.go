@@ -8,25 +8,25 @@ import (
 func formRoutes(ctl *controller.Controller) []Route {
 	return []Route{
 		{
-			Path:    "/formulario",
+			Path:    "/form",
 			Method:  http.MethodGet,
 			Handler: ctl.Form.List,
 			Auth:    true,
 		},
 		{
-			Path:    "/formulario",
+			Path:    "/form",
 			Method:  http.MethodPut,
 			Handler: ctl.Form.Create,
 			Auth:    true,
 		},
 		{
-			Path: "/formulario/:id",
+			Path: "/form/:id",
 			Method: http.MethodDelete,
 			Handler: ctl.Form.Delete,
 			Auth: true,
 		},
 		{
-			Path: "/formulario",
+			Path: "/form",
 			Method: http.MethodPatch,
 			Handler: ctl.Form.Update,
 			Auth: true,

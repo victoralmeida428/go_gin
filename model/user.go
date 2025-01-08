@@ -9,8 +9,8 @@ import (
 
 type Empresa struct {
 	ID      int    `json:"id"`
-	Nome    string `json:"nome"`
-	NivelID Nivel  `json:"nivel"`
+	Nome    string `json:"name"`
+	NivelID Nivel  `json:"level"`
 }
 
 type Nivel struct {
@@ -20,14 +20,14 @@ type Nivel struct {
 
 type User struct {
 	ID          int          `json:"id"`
-	Usuario     string       `json:"usuario" binding:"required"`
+	Usuario     string       `json:"user,omitempty" binding:"required"`
 	FirstName   string       `json:"first_name,omitempty" binding:"required"`
 	LastName    string       `json:"last_name,omitempty" binding:"required"`
-	Senha       string       `json:"senha,omitempty" binding:"required"`
-	Email       *string      `json:"email"`
-	EmpresaID   *Empresa     `json:"empresa,omitempty"`
-	ManagerID   *int         `json:"manager_id"`
-	Grupamentos []Grupamento `json:"grupamentos,omitempty"`
+	Senha       string       `json:"password,omitempty" binding:"required"`
+	Email       *string      `json:"email,omitempty"`
+	EmpresaID   *Empresa     `json:"enterprise,omitempty"`
+	ManagerID   *int         `json:"manager_id,omitempty"`
+	Grupamentos []Grupamento `json:"groups,omitempty"`
 }
 
 var (

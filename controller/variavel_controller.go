@@ -13,14 +13,14 @@ type variavelController struct {
 	repo *repository.Repository
 }
 
-// @Summary Listar tipos
-// @Description Listar todos tipos de variáveis
-// @Tags variaveis
+// @Summary List types
+// @Description List all variables types
+// @Tags variables
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} []model.TipoVariavel
-// @Router /api/variaveis/tipo [get]
+// @Router /variable/tipo [get]
 func (c *variavelController) ListTipos(ctx *gin.Context){
 	tipos, err := c.repo.Variavel.ListTipos()
 	if err != nil {
@@ -32,15 +32,14 @@ func (c *variavelController) ListTipos(ctx *gin.Context){
 }
 
 
-// @Summary Criar grupamento
-// @Description Criar um grupamento
-// @Tags variaveis
+// @Summary Create groups
+// @Tags variables
 // @Accept json
 // @Produce json
-// @Param user body model.Grupamento true  "Grupamento"
+// @Param user body model.Grupamento true  "Groups"
 // @Security BearerAuth
 // @Success 200 {object} createResponse
-// @Router /api/variaveis/grupamento [put]
+// @Router /variable/groups [put]
 func (c *variavelController) CreateGrupo(ctx *gin.Context){
 	
 	var input model.Grupamento
@@ -58,14 +57,14 @@ func (c *variavelController) CreateGrupo(ctx *gin.Context){
 }
 
 
-// @Summary Listar Grupamentos
-// @Description Listar todos os Grupamentos
+// @Summary List Groups
+// @Description List all groups
 // @Tags variaveis
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} []model.Grupamento
-// @Router /api/variaveis/grupamento [get]
+// @Router /variable/groups [get]
 func (c *variavelController) ListGrupo(ctx *gin.Context){
 	
 	grupos, err := c.repo.Variavel.ListGrupamentos()
@@ -77,15 +76,15 @@ func (c *variavelController) ListGrupo(ctx *gin.Context){
 	ctx.JSON(http.StatusOK, grupos)
 }
 
-// @Summary Criar Variáveis
-// @Description Criar somente a variável
-// @Tags variaveis
+// @Summary Create variable
+// @Description Create only one variable
+// @Tags variables
 // @Accept json
 // @Produce json
-// @Param user body model.Variavel true  "Variavel"
+// @Param user body model.Variavel true  "Variable"
 // @Security BearerAuth
 // @Success 200 {object} createResponse
-// @Router /api/variaveis [put]
+// @Router /variable [put]
 func (c *variavelController) CreateVariavel(ctx *gin.Context){
 	var input model.Variavel
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -101,14 +100,14 @@ func (c *variavelController) CreateVariavel(ctx *gin.Context){
 
 }
 
-// @Summary Listar Variaveis
-// @Description Listar todos as Variaveis
-// @Tags variaveis
+// @Summary List variables
+// @Description List all variables
+// @Tags variables
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} []model.Variavel
-// @Router /api/variaveis [get]
+// @Router /variable [get]
 func (c *variavelController) ListVariavel(ctx *gin.Context) {
 	variaveis, err := c.repo.Variavel.FindAll()
 	if err != nil {
@@ -119,14 +118,14 @@ func (c *variavelController) ListVariavel(ctx *gin.Context) {
 }
 
 
-// @Summary Listar Grupamentos
-// @Description Listar todos os grupamentos existentes
-// @Tags variaveis
+// @Summary List Groups by user
+// @Description List all groups by user
+// @Tags variables
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} []model.Grupamento
-// @Router /api/variaveis/grupamento [get]
+// @Router /variable/groups [get]
 func (c *variavelController) ListGrupamentos(ctx *gin.Context) {
 	userHeader, exists := ctx.Get("user")
 	if !exists {

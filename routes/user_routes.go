@@ -25,13 +25,13 @@ func userRoutes(ctl *controller.Controller) []Route {
 			Auth:    false,
 		},
 		{
-			Path:    "/user/grupamento",
+			Path:    "/user/groups",
 			Method:  http.MethodPost,
 			Handler: ctl.User.AddGrupamento,
 			Auth:    true,
 		},
 		{
-			Path:    "/user/grupamento",
+			Path:    "/user/groups",
 			Method:  http.MethodDelete,
 			Handler: ctl.User.DelGrupamento,
 			Auth:    true,

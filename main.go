@@ -13,8 +13,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type User struct {
@@ -35,6 +33,8 @@ func init() {
 	MODE := os.Getenv("GIN_MODE")
 	if MODE == "release" {
 		gin.SetMode(gin.ReleaseMode)
+	} else if MODE == "test" {
+		gin.SetMode(gin.TestMode)
 	} else {
 		gin.SetMode(gin.DebugMode)
 	}
@@ -44,6 +44,20 @@ func init() {
 	flag.Parse()
 }
 
+// @title API de Indicadores
+// @version 1.0
+// @description Esta é a API de Indicadores.
+// @contact.name Suporte
+// @contact.email analytics@controllab.com
+// @license.name MIT
+
+// @BasePath /api/v1 
+// @schemes http https
+// @host victor.controllab.com:8000
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	r := gin.Default()
 	r.SetTrustedProxies([]string{"127.0.0.1", "victor.controllab.com"})
@@ -54,11 +68,19 @@ func main() {
 	
 	repository := repository.New(database)
 	controller := controller.New(repository)
+
+	//static files
+	r.Static("/swagger-ui","./docs/swagger-ui")
+	r.StaticFile("/swagger/doc.json","./docs/swagger.json")
+
+	
+	r.GET("/swagger", func (c *gin.Context){
+		c.File("./docs/index.html")
+	})
 	
 	r.Use(middlewares.CorsMiddleware)
 	routes.GenerateRouter(controller, r)
 	
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	
 	if err = r.Run(fmt.Sprintf("%s:%d", HOST, PORT)); err != nil {
 		panic(err)

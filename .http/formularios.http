@@ -1,10 +1,10 @@
 ### CONSTANTES
-@baseUrl = http://victor.controllab.com:8000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTkyNjA0NywiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Yha-LuX_vcIAbthl28IolGcD5N0ZCpo7x3aKYKXRkHs
+@baseUrl = http://victor.controllab.com:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjQzMTU4NCwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.BHS3awHTDlOwW_vKCSzaUumEHPNzOCYwb5YAeZzBuIM
 
 
 ### TODOS OS FORMULÁRIOS
-GET {{baseUrl}}/formulario
+GET {{baseUrl}}/form
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

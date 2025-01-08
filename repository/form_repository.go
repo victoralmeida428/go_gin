@@ -14,6 +14,8 @@ func (form *FormularioRepository) FindAll() ([]model.Formulario, error) {
 	query := `
 	SELECT id, nome, descricao, ativo
 	FROM indicadores.formulario
+	JOIN indicadores.versao_formulario vf ON vf.formulario_id = id
+	JOIN indicadores.
 	`
 	rows, err := form.connection.Query(query)
 	if err != nil {

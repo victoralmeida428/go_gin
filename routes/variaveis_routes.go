@@ -8,37 +8,37 @@ import (
 func variaveisRoutes(ctl *controller.Controller) []Route {
 	return []Route{
 		{
-			Path:    "/variaveis/tipo",
+			Path:    "/variable/type",
 			Method:  http.MethodGet,
 			Handler: ctl.Variavel.ListTipos,
 			Auth:    true,
 		},
 		{
-			Path:    "/variaveis/grupamento",
+			Path:    "/variable/groups",
 			Method:  http.MethodGet,
 			Handler: ctl.Variavel.ListGrupo,
 			Auth:    true,
 		},
 		{
-			Path:    "/variaveis/grupamento",
+			Path:    "/variable/groups",
 			Method:  http.MethodPut,
 			Handler: ctl.Variavel.CreateGrupo,
 			Auth:    true,
 		},
 		{
-			Path:    "/variaveis",
+			Path:    "/variable",
 			Method:  http.MethodPut,
 			Handler: ctl.Variavel.CreateVariavel,
 			Auth:    true,
 		},
 		{
-			Path:    "/variaveis",
+			Path:    "/variable",
 			Method:  http.MethodGet,
 			Handler: ctl.Variavel.ListVariavel,
 			Auth:    true,
 		},
 		{
-			Path:    "/grupamento",
+			Path:    "/groups",
 			Method:  http.MethodGet,
 			Handler: ctl.Variavel.ListGrupamentos,
 			Auth:    true,

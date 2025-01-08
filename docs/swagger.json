@@ -1,34 +1,43 @@
 {
-    "swagger": "2.0",
+    "openapi": "3.0.0",
     "info": {
-        "contact": {}
+        "description": "Esta é a API de Indicadores.",
+        "title": "API de Indicadores",
+        "contact": {
+            "name": "Suporte",
+            "email": "analytics@controllab.com"
+        },
+        "version": "1.0"
     },
+    "servers": [
+        {
+            "url": "http://victor.controllab.com:8000/api/v1"
+        }
+    ],
     "paths": {
-        "/api/formulario": {
+        "/form": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar todos os formulários ativos",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "List all forms",
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Listar Formulário",
+                "summary": "List Forms",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Formulario"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Formulario"
+                                    }
+                                }
                             }
                         }
                     }
@@ -40,33 +49,31 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar todos os formulários ativos",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Create a form",
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Criar Formulário",
+                "summary": "Create Form",
                 "parameters": [
                     {
-                        "description": "Formulário",
+                        "description": "Input",
                         "name": "form",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Formulario"
+                            "$ref": "#/components/schemas/Formulario"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
@@ -77,173 +84,191 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Atualiza um usuário",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Atualizar Formulário",
+                "summary": "Update Form",
                 "parameters": [
                     {
-                        "description": "Formulário",
+                        "description": "Input",
                         "name": "form",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Formulario"
+                            "$ref": "#/components/schemas/Formulario"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/formulario/{id}": {
+        "/form/{id}": {
             "delete": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Deleta o usuário",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Delete Form",
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Deletar Formulário",
-                "parameters": [
-                    {
-                        "description": "Formulário",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Formulario"
-                        }
-                    }
-                ],
+                "summary": "Delete Form",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/user": {
+        "/schedule": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar os dados do usuário logado",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "List all schedules",
                 "tags": [
-                    "user"
+                    "schedules"
                 ],
-                "summary": "Usuário",
+                "summary": "List Schedules",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Agendamento"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/user/create": {
-            "put": {
-                "description": "Criar um novo usuário",
-                "consumes": [
-                    "application/json"
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Return the logged-in user's data",
                 "tags": [
                     "user"
                 ],
-                "summary": "Criar Usuário",
+                "summary": "User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "members": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/create": {
+            "put": {
+                "description": "Create new user",
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create user",
                 "parameters": [
                     {
                         "description": "Usuário",
                         "name": "user",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/components/schemas/User"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/user/grupamento": {
+        "/user/groups": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Fazer ligação do usuário com o grupamento",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Establishing the Relationship Between Users and Groups",
                 "tags": [
                     "user"
                 ],
-                "summary": "Adicionar Grupamento",
+                "summary": "Add groups",
                 "parameters": [
                     {
-                        "description": "Dados para o grupamento",
+                        "description": "Input",
                         "name": "login",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.AddGrupamentoInput"
+                            "$ref": "#/components/schemas/AddGrupamentoInput"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
@@ -254,97 +279,94 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Fazer ligação do usuário com o grupamento",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Linking Users to Groups",
                 "tags": [
                     "user"
                 ],
-                "summary": "Remover Grupamento",
+                "summary": "Remove Groups",
                 "parameters": [
                     {
-                        "description": "Dados para o grupamento",
+                        "description": "Input",
                         "name": "login",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.DelGrupamentoInput"
+                            "$ref": "#/components/schemas/DelGrupamentoInput"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/user/login": {
+        "/user/login": {
             "post": {
-                "description": "Pegar token JWT",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "return JWT token",
                 "tags": [
                     "user"
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loginRequest"
+                            }
+                        }
+                    }
+                },
                 "summary": "Login",
-                "parameters": [
-                    {
-                        "description": "Dados de Login",
-                        "name": "login",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controller.loginRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.loginResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/variaveis": {
+        "/variable": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos as Variaveis",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "List all variables",
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar Variaveis",
+                "summary": "List variables",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Variavel"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Variavel"
+                                    }
+                                }
                             }
                         }
                     }
@@ -356,63 +378,59 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Criar somente a variável",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Create only one variable",
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Criar Variáveis",
+                "summary": "Create variable",
                 "parameters": [
                     {
-                        "description": "Variavel",
+                        "description": "Variable",
                         "name": "user",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Variavel"
+                            "$ref": "#/components/schemas/Variavel"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/variaveis/grupamento": {
+        "/variable/groups": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos os grupamentos existentes",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "List all groups by user",
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar Grupamentos",
+                "summary": "List Groups by user",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Grupamento"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Grupamento"
+                                    }
+                                }
                             }
                         }
                     }
@@ -424,63 +442,58 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Criar um grupamento",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Criar grupamento",
+                "summary": "Create groups",
                 "parameters": [
                     {
-                        "description": "Grupamento",
+                        "description": "Groups",
                         "name": "user",
-                        "in": "body",
+                        "in": "path",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Grupamento"
+                            "$ref": "#/components/schemas/Grupamento"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.createResponse"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createResponse"
+                                }
+                            }
                         }
                     }
                 }
             }
         },
-        "/api/variaveis/tipo": {
+        "/variable/tipo": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos tipos de variáveis",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "List all variables types",
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar tipos",
+                "summary": "List types",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.TipoVariavel"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TipoVariavel"
+                                    }
+                                }
                             }
                         }
                     }
@@ -488,213 +501,288 @@
             }
         }
     },
-    "definitions": {
-        "controller.AddGrupamentoInput": {
-            "type": "object",
-            "required": [
-                "grupamento_id",
-                "user_id"
-            ],
-            "properties": {
-                "grupamento_id": {
-                    "type": "integer"
-                },
-                "user_id": {
-                    "type": "array",
-                    "items": {
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        },
+        "schemas": {
+            "AddGrupamentoInput": {
+                "type": "object",
+                "required": [
+                    "groups_id",
+                    "user_id"
+                ],
+                "properties": {
+                    "groups_id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "DelGrupamentoInput": {
+                "type": "object",
+                "required": [
+                    "groups_id",
+                    "user_id"
+                ],
+                "properties": {
+                    "groups_id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
                         "type": "integer"
                     }
                 }
-            }
-        },
-        "controller.DelGrupamentoInput": {
-            "type": "object",
-            "required": [
-                "grupamento_id",
-                "user_id"
-            ],
-            "properties": {
-                "grupamento_id": {
-                    "type": "integer"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "controller.createResponse": {
-            "type": "object",
-            "required": [
-                "message"
-            ],
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "controller.loginRequest": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "controller.loginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Empresa": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "nivel": {
-                    "$ref": "#/definitions/model.Nivel"
-                },
-                "nome": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Formulario": {
-            "type": "object",
-            "required": [
-                "ativo",
-                "nome"
-            ],
-            "properties": {
-                "ativo": {
-                    "type": "boolean"
-                },
-                "descricao": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "nome": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Grupamento": {
-            "type": "object",
-            "required": [
-                "nome"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "nome": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Nivel": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "nome": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.TipoVariavel": {
-            "type": "object",
-            "required": [
-                "nome"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "nome": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.User": {
-            "type": "object",
-            "required": [
-                "first_name",
-                "last_name",
-                "senha",
-                "usuario"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "empresa": {
-                    "$ref": "#/definitions/model.Empresa"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "grupamentos": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Grupamento"
+            },
+            "createResponse": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
                     }
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "manager_id": {
-                    "type": "integer"
-                },
-                "senha": {
-                    "type": "string"
-                },
-                "usuario": {
-                    "type": "string"
                 }
-            }
-        },
-        "model.Variavel": {
-            "type": "object",
-            "required": [
-                "texto",
-                "tipo_variavel_id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "obrigatorio": {
-                    "type": "boolean"
-                },
-                "pergunta_id": {
-                    "type": "integer"
-                },
-                "possui_item": {
-                    "type": "boolean"
-                },
-                "texto": {
-                    "type": "string"
-                },
-                "tipo_variavel_id": {
-                    "$ref": "#/definitions/model.TipoVariavel"
+            },
+            "loginRequest": {
+                "type": "object",
+                "required": [
+                    "password",
+                    "username"
+                ],
+                "properties": {
+                    "password": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Agendamento": {
+                "type": "object",
+                "properties": {
+                    "active": {
+                        "type": "boolean"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "method": {
+                        "$ref": "#/components/schemas/Metodo"
+                    },
+                    "next": {
+                        "type": "string"
+                    },
+                    "periodicity": {
+                        "$ref": "#/components/schemas/Periodicidade"
+                    },
+                    "start": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "version_form": {
+                        "$ref": "#/components/schemas/VersaoFormulario"
+                    }
+                }
+            },
+            "Empresa": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "level": {
+                        "$ref": "#/components/schemas/Nivel"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Formulario": {
+                "type": "object",
+                "required": [
+                    "active",
+                    "name"
+                ],
+                "properties": {
+                    "active": {
+                        "type": "boolean"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Grupamento": {
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Metodo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Nivel": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nome": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Periodicidade": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "interval": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TipoVariavel": {
+                "type": "object",
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nome": {
+                        "type": "string"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "required": [
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "user"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "enterprise": {
+                        "$ref": "#/components/schemas/Empresa"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Grupamento"
+                        }
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "manager_id": {
+                        "type": "integer"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Variavel": {
+                "type": "object",
+                "required": [
+                    "data_type_id",
+                    "text"
+                ],
+                "properties": {
+                    "data_type_id": {
+                        "$ref": "#/components/schemas/TipoVariavel"
+                    },
+                    "has_item": {
+                        "type": "boolean"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "question_id": {
+                        "type": "integer"
+                    },
+                    "required": {
+                        "type": "boolean"
+                    },
+                    "text": {
+                        "type": "string"
+                    }
+                }
+            },
+            "VersaoFormulario": {
+                "type": "object",
+                "required": [
+                    "version"
+                ],
+                "properties": {
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "form": {
+                        "$ref": "#/components/schemas/Formulario"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "version": {
+                        "type": "integer"
+                    }
                 }
             }
         }

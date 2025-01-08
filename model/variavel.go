@@ -4,20 +4,20 @@ import "time"
 
 type Variavel struct {
 	ID           int          `json:"id"`
-	TipoVariavel TipoVariavel `json:"tipo_variavel_id" binding:"required"`
-	PerguntaId   *int         `json:"pergunta_id,omitempty"`
-	PossuiItem   bool         `json:"possui_item"`
-	Obrigatorio  bool         `json:"obrigatorio"`
-	Texto        string       `json:"texto" binding:"required"`
+	TipoVariavel TipoVariavel `json:"data_type_id" binding:"required"`
+	PerguntaId   *int         `json:"question_id,omitempty"`
+	PossuiItem   bool         `json:"has_item"`
+	Obrigatorio  bool         `json:"required"`
+	Texto        string       `json:"text" binding:"required"`
 }
 
 type ViewVariavel struct {
 	ID           int          `json:"id"`
-	TipoVariavel TipoVariavel `json:"tipo_variavel_id" binding:"required"`
-	Pergunta     string      `json:"pergunta,omitempty"`
+	TipoVariavel TipoVariavel `json:"data_type_id" binding:"required"`
+	Pergunta     string      `json:"question,omitempty"`
 	Item         *string      `json:"item,omitempty"`
-	PossuiItem   bool         `json:"possui_item"`
-	Obrigatorio  bool         `json:"obrigatorio"`
+	PossuiItem   bool         `json:"has_item"`
+	Obrigatorio  bool         `json:"required"`
 }
 
 type TipoVariavel struct {
@@ -27,12 +27,12 @@ type TipoVariavel struct {
 
 type VersaoVariavel struct {
 	ID           int        `json:"id"`
-	FormularioId Formulario `json:"formulario_id,omitempty" binding:"required"`
-	Versao       int        `json:"versao,omitempty" binding:"required"`
-	CriadoEm     time.Time  `json:"criado_em,omitempty" binding:"required"`
+	FormularioId Formulario `json:"form_id,omitempty" binding:"required"`
+	Versao       int        `json:"version,omitempty" binding:"required"`
+	CriadoEm     time.Time  `json:"created_at,omitempty" binding:"required"`
 }
 
 type Grupamento struct {
 	ID   int    `json:"id"`
-	Nome string `json:"nome" binding:"required"`
+	Nome string `json:"name" binding:"required"`
 }

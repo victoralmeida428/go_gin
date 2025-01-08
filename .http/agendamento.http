@@ -1,0 +1,9 @@
+### CONSTANTES
+@baseUrl = http://victor.controllab.com:8000/api/v1
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTk5NDgxMCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Po0x0Aa5Oo-Idx54VgUo95g-Sgp239hkvK_rsOi9tg0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjQzMTU4NCwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.BHS3awHTDlOwW_vKCSzaUumEHPNzOCYwb5YAeZzBuIM
+
+
+### Listar Agendamentos
+GET {{baseUrl}}/schedule
+Authorization: Bearer {{token}}

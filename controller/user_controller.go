@@ -14,14 +14,14 @@ type userController struct {
 }
 
 // GetUser
-// @Summary Criar Usuário
-// @Description Criar um novo usuário
+// @Summary Create user
+// @Description Create new user
 // @Tags user
 // @Accept json
 // @Produce json
 // @Param user body model.User true  "Usuário"
 // @Success 200 {object} model.User
-// @Router /api/user/create [put]
+// @Router /user/create [put]
 func (uc *userController) CreateUser(ctx *gin.Context) {
 	var input struct {
 		model.User
@@ -50,15 +50,14 @@ func (uc *userController) CreateUser(ctx *gin.Context) {
 
 }
 
-// GetUser
-// @Summary Usuário
-// @Description Retornar os dados do usuário logado
+// @Summary User
+// @Description Return the logged-in user's data
 // @Tags user
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} model.User
-// @Router /api/user [get]
+// @Router /user [get]
 func (uc *userController) GetUser(ctx *gin.Context) {
 	userHeader, exists := ctx.Get("user")
 	if !exists {
@@ -115,13 +114,13 @@ type loginResponse struct {
 
 // Fazer login
 // @Summary Login
-// @Description Pegar token JWT
+// @Description return JWT token
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param login body loginRequest true "Dados de Login"
+// @Param login body loginRequest true "Input"
 // @Success 200 {object} loginResponse
-// @Router /api/user/login [post]
+// @Router /user/login [post]
 func (uc *userController) Login(ctx *gin.Context) {
 	var user loginRequest
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -145,22 +144,22 @@ func (uc *userController) Login(ctx *gin.Context) {
 
 type AddGrupamentoInput struct {
 	UserID       []int `json:"user_id" binding:"required"`
-	GrupamentoID int   `json:"grupamento_id" binding:"required"`
+	GrupamentoID int   `json:"groups_id" binding:"required"`
 }
 
-// @Summary Adicionar Grupamento
-// @Description Fazer ligação do usuário com o grupamento
+// @Summary Add groups
+// @Description Establishing the Relationship Between Users and Groups
 // @Tags user
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param login body AddGrupamentoInput true "Dados para o grupamento"
+// @Param login body AddGrupamentoInput true "Input"
 // @Success 200 {object} createResponse
-// @Router /api/user/grupamento [post]
+// @Router /user/groups [post]
 func (uc *userController) AddGrupamento(ctx *gin.Context) {
 	var input struct {
 		UserID       []int `json:"user_id" binding:"required"`
-		GrupamentoID int   `json:"grupamento_id" binding:"required"`
+		GrupamentoID int   `json:"groups_id" binding:"required"`
 	}
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -190,23 +189,20 @@ func (uc *userController) AddGrupamento(ctx *gin.Context) {
 
 type DelGrupamentoInput struct {
 	UserID       int `json:"user_id" binding:"required"`
-	GrupamentoID int `json:"grupamento_id" binding:"required"`
+	GrupamentoID int `json:"groups_id" binding:"required"`
 }
 
-// @Summary Remover Grupamento
-// @Description Fazer ligação do usuário com o grupamento
+// @Summary Remove Groups
+// @Description Linking Users to Groups
 // @Tags user
 // @Accept json
 // @Security BearerAuth
 // @Produce json
-// @Param login body DelGrupamentoInput true "Dados para o grupamento"
+// @Param login body DelGrupamentoInput true "Input"
 // @Success 200 {object} createResponse
-// @Router /api/user/grupamento [delete]
+// @Router /user/groups [delete]
 func (uc *userController) DelGrupamento(ctx *gin.Context) {
-	var input struct {
-		UserID       int `json:"user_id" binding:"required"`
-		GrupamentoID int `json:"grupamento_id" binding:"required"`
-	}
+	var input DelGrupamentoInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -217,5 +213,5 @@ func (uc *userController) DelGrupamento(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Usuário %d removidos do grupo %d", input.UserID, input.GrupamentoID)})
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Usuário %d removido do grupo %d", input.UserID, input.GrupamentoID)})
 }

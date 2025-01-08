@@ -5,6 +5,7 @@ import (
 	"abramed_go/model"
 	"database/sql"
 	"errors"
+	"strings"
 )
 type UserRepository struct {
 	connection *sql.DB
@@ -152,6 +153,9 @@ func (ur *UserRepository) AddGrupamento(usuario *model.User, grupo *model.Grupam
 	_, err = tx.Exec(query, usuario.ID, grupo.ID)
 	if err != nil {
 		tx.Rollback()
+		if strings.Contains(err.Error(), "unicidade") {
+			return errors.New("grupamento já adicionado")
+		}
 		return err
 	}
 	tx.Commit()

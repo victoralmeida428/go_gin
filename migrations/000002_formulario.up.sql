@@ -40,7 +40,7 @@ create table if not exists indicadores.tipo_variavel(
 
 create table if not exists indicadores.grupamento(
     id serial primary key,
-    nome character varying not null
+    nome character varying not null UNIQUE
 );
 
 create table if not exists indicadores.variavel(

@@ -14,15 +14,14 @@ type formController struct {
 	repo *repository.Repository
 }
 
-// Lista todos os formulários
-// @Summary Listar Formulário
-// @Description Retornar todos os formulários ativos
-// @Tags formulario
+// @Summary List Forms
+// @Description List all forms
+// @Tags form
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} []model.Formulario
-// @Router /api/formulario [get]
+// @Router /form [get]
 func (fc *formController) List(ctx *gin.Context) {
 	forms, err := fc.repo.Formulario.FindAll()
 	if err != nil {
@@ -36,16 +35,16 @@ type createResponse struct {
 	Message string `form:"message" json:"message" binding:"required"`
 }
 
-// Cria um formulario
-// @Summary Criar Formulário
-// @Description Retornar todos os formulários ativos
-// @Tags formulario
+
+// @Summary Create Form
+// @Description Create a form
+// @Tags form
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param form body model.Formulario true "Formulário"
+// @Param form body model.Formulario true "Input"
 // @Success 200 {object} createResponse
-// @Router /api/formulario [put]
+// @Router /form [put]
 func (fc *formController) Create(ctx *gin.Context) {
 	var form model.Formulario
 	if err := ctx.ShouldBindJSON(&form); err != nil {
@@ -60,16 +59,16 @@ func (fc *formController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, createResponse{Message: "Formulario criado com sucesso"})
 }
 
-// Deleta um formulario
-// @Summary Deletar Formulário
-// @Description Deleta o usuário
-// @Tags formulario
+
+// @Summary Delete Form
+// @Description Delete Form
+// @Tags form
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param form body model.Formulario true "Formulário"
+// @Param form body model.Formulario true "form"
 // @Success 200 {object} createResponse
-// @Router /api/formulario/{id} [delete]
+// @Router /form/{id} [delete]
 func (fc *formController) Delete(ctx *gin.Context) {
 	id, exists := ctx.Params.Get("id")
 	if !exists {
@@ -94,16 +93,14 @@ func (fc *formController) Delete(ctx *gin.Context) {
 }
 
 
-// Atualiza um formulario
-// @Summary Atualizar Formulário
-// @Description Atualiza um usuário
-// @Tags formulario
+// @Summary Update Form
+// @Tags form
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param form body model.Formulario true "Formulário"
+// @Param form body model.Formulario true "Input"
 // @Success 200 {object} createResponse
-// @Router /api/formulario [patch]
+// @Router /form [patch]
 func (fc *formController) Update(ctx *gin.Context) {
 	type input struct {
 		ID int `json:"id" binding:"required"`

@@ -9,20 +9,26 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Suporte",
+            "email": "analytics@controllab.com"
+        },
+        "license": {
+            "name": "MIT"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/formulario": {
+        "/form": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar todos os formulários ativos",
+                "description": "List all forms",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,9 +36,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Listar Formulário",
+                "summary": "List Forms",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -51,7 +57,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar todos os formulários ativos",
+                "description": "Create a form",
                 "consumes": [
                     "application/json"
                 ],
@@ -59,12 +65,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Criar Formulário",
+                "summary": "Create Form",
                 "parameters": [
                     {
-                        "description": "Formulário",
+                        "description": "Input",
                         "name": "form",
                         "in": "body",
                         "required": true,
@@ -88,7 +94,6 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Atualiza um usuário",
                 "consumes": [
                     "application/json"
                 ],
@@ -96,12 +101,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Atualizar Formulário",
+                "summary": "Update Form",
                 "parameters": [
                     {
-                        "description": "Formulário",
+                        "description": "Input",
                         "name": "form",
                         "in": "body",
                         "required": true,
@@ -120,14 +125,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/formulario/{id}": {
+        "/form/{id}": {
             "delete": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Deleta o usuário",
+                "description": "Delete Form",
                 "consumes": [
                     "application/json"
                 ],
@@ -135,12 +140,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "formulario"
+                    "form"
                 ],
-                "summary": "Deletar Formulário",
+                "summary": "Delete Form",
                 "parameters": [
                     {
-                        "description": "Formulário",
+                        "description": "form",
                         "name": "form",
                         "in": "body",
                         "required": true,
@@ -159,14 +164,45 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user": {
+        "/schedule": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retornar os dados do usuário logado",
+                "description": "List all schedules",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "List Schedules",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Agendamento"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Return the logged-in user's data",
                 "consumes": [
                     "application/json"
                 ],
@@ -176,7 +212,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Usuário",
+                "summary": "User",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -187,9 +223,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user/create": {
+        "/user/create": {
             "put": {
-                "description": "Criar um novo usuário",
+                "description": "Create new user",
                 "consumes": [
                     "application/json"
                 ],
@@ -199,7 +235,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Criar Usuário",
+                "summary": "Create user",
                 "parameters": [
                     {
                         "description": "Usuário",
@@ -221,14 +257,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user/grupamento": {
+        "/user/groups": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Fazer ligação do usuário com o grupamento",
+                "description": "Establishing the Relationship Between Users and Groups",
                 "consumes": [
                     "application/json"
                 ],
@@ -238,10 +274,10 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Adicionar Grupamento",
+                "summary": "Add groups",
                 "parameters": [
                     {
-                        "description": "Dados para o grupamento",
+                        "description": "Input",
                         "name": "login",
                         "in": "body",
                         "required": true,
@@ -265,7 +301,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Fazer ligação do usuário com o grupamento",
+                "description": "Linking Users to Groups",
                 "consumes": [
                     "application/json"
                 ],
@@ -275,10 +311,10 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Remover Grupamento",
+                "summary": "Remove Groups",
                 "parameters": [
                     {
-                        "description": "Dados para o grupamento",
+                        "description": "Input",
                         "name": "login",
                         "in": "body",
                         "required": true,
@@ -297,9 +333,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user/login": {
+        "/user/login": {
             "post": {
-                "description": "Pegar token JWT",
+                "description": "return JWT token",
                 "consumes": [
                     "application/json"
                 ],
@@ -312,7 +348,7 @@ const docTemplate = `{
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "Dados de Login",
+                        "description": "Input",
                         "name": "login",
                         "in": "body",
                         "required": true,
@@ -331,14 +367,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/variaveis": {
+        "/variable": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos as Variaveis",
+                "description": "List all variables",
                 "consumes": [
                     "application/json"
                 ],
@@ -346,9 +382,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar Variaveis",
+                "summary": "List variables",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -367,7 +403,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Criar somente a variável",
+                "description": "Create only one variable",
                 "consumes": [
                     "application/json"
                 ],
@@ -375,12 +411,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Criar Variáveis",
+                "summary": "Create variable",
                 "parameters": [
                     {
-                        "description": "Variavel",
+                        "description": "Variable",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -399,14 +435,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/variaveis/grupamento": {
+        "/variable/groups": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos os grupamentos existentes",
+                "description": "List all groups by user",
                 "consumes": [
                     "application/json"
                 ],
@@ -414,9 +450,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar Grupamentos",
+                "summary": "List Groups by user",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -435,7 +471,6 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Criar um grupamento",
                 "consumes": [
                     "application/json"
                 ],
@@ -443,12 +478,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Criar grupamento",
+                "summary": "Create groups",
                 "parameters": [
                     {
-                        "description": "Grupamento",
+                        "description": "Groups",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -467,14 +502,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/variaveis/tipo": {
+        "/variable/tipo": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Listar todos tipos de variáveis",
+                "description": "List all variables types",
                 "consumes": [
                     "application/json"
                 ],
@@ -482,9 +517,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "variaveis"
+                    "variables"
                 ],
-                "summary": "Listar tipos",
+                "summary": "List types",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -503,11 +538,11 @@ const docTemplate = `{
         "controller.AddGrupamentoInput": {
             "type": "object",
             "required": [
-                "grupamento_id",
+                "groups_id",
                 "user_id"
             ],
             "properties": {
-                "grupamento_id": {
+                "groups_id": {
                     "type": "integer"
                 },
                 "user_id": {
@@ -521,11 +556,11 @@ const docTemplate = `{
         "controller.DelGrupamentoInput": {
             "type": "object",
             "required": [
-                "grupamento_id",
+                "groups_id",
                 "user_id"
             ],
             "properties": {
-                "grupamento_id": {
+                "groups_id": {
                     "type": "integer"
                 },
                 "user_id": {
@@ -567,16 +602,45 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Agendamento": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "$ref": "#/definitions/model.Metodo"
+                },
+                "next": {
+                    "type": "string"
+                },
+                "periodicity": {
+                    "$ref": "#/definitions/model.Periodicidade"
+                },
+                "start": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
+                },
+                "version_form": {
+                    "$ref": "#/definitions/model.VersaoFormulario"
+                }
+            }
+        },
         "model.Empresa": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
-                "nivel": {
+                "level": {
                     "$ref": "#/definitions/model.Nivel"
                 },
-                "nome": {
+                "name": {
                     "type": "string"
                 }
             }
@@ -584,20 +648,20 @@ const docTemplate = `{
         "model.Formulario": {
             "type": "object",
             "required": [
-                "ativo",
-                "nome"
+                "active",
+                "name"
             ],
             "properties": {
-                "ativo": {
+                "active": {
                     "type": "boolean"
                 },
-                "descricao": {
+                "description": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "nome": {
+                "name": {
                     "type": "string"
                 }
             }
@@ -605,13 +669,24 @@ const docTemplate = `{
         "model.Grupamento": {
             "type": "object",
             "required": [
-                "nome"
+                "name"
             ],
             "properties": {
                 "id": {
                     "type": "integer"
                 },
-                "nome": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Metodo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -623,6 +698,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Periodicidade": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "interval": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -646,20 +735,20 @@ const docTemplate = `{
             "required": [
                 "first_name",
                 "last_name",
-                "senha",
-                "usuario"
+                "password",
+                "user"
             ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "empresa": {
+                "enterprise": {
                     "$ref": "#/definitions/model.Empresa"
                 },
                 "first_name": {
                     "type": "string"
                 },
-                "grupamentos": {
+                "groups": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Grupamento"
@@ -674,10 +763,10 @@ const docTemplate = `{
                 "manager_id": {
                     "type": "integer"
                 },
-                "senha": {
+                "password": {
                     "type": "string"
                 },
-                "usuario": {
+                "user": {
                     "type": "string"
                 }
             }
@@ -685,41 +774,68 @@ const docTemplate = `{
         "model.Variavel": {
             "type": "object",
             "required": [
-                "texto",
-                "tipo_variavel_id"
+                "data_type_id",
+                "text"
             ],
             "properties": {
+                "data_type_id": {
+                    "$ref": "#/definitions/model.TipoVariavel"
+                },
+                "has_item": {
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "obrigatorio": {
-                    "type": "boolean"
-                },
-                "pergunta_id": {
+                "question_id": {
                     "type": "integer"
                 },
-                "possui_item": {
+                "required": {
                     "type": "boolean"
                 },
-                "texto": {
+                "text": {
                     "type": "string"
-                },
-                "tipo_variavel_id": {
-                    "$ref": "#/definitions/model.TipoVariavel"
                 }
             }
+        },
+        "model.VersaoFormulario": {
+            "type": "object",
+            "required": [
+                "version"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "form": {
+                    "$ref": "#/definitions/model.Formulario"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0",
+	Host:             "victor.controllab.com:8000",
+	BasePath:         "/api/v1",
+	Schemes:          []string{"http", "https"},
+	Title:            "API de Indicadores",
+	Description:      "Esta é a API de Indicadores.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

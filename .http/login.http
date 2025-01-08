@@ -1,6 +1,6 @@
 
 @baseUrl = http://victor.controllab.com:8000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjM1MzM5MSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.O3UvRCZA1mxTaz-tGmOj6Ue5WQGGlbhhEY5ULcnFGsY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjQ0MDQ1MSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.wLFQbbzrdafvLP3mSHKIvj38eDleoafcma_m5w6h4to
 # @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoxLCJleHAiOjE3MzYyNzg3OTcsImlkIjoyLCJtYW5hZ2VyX2lkIjoxLCJ1c3VhcmlvIjoiYnJ1bm8ifQ.QugDQGFv_Gkf2yZseZmofzC2ifyZSx86c3_7dYxD9ZE
 # @token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzQGVtYWlsLmNvbSIsImVtcHJlc2EiOiJjb250cm9sbGFiIiwiZXhwIjoxNzM2MDEyNjQzLCJpZCI6NywibWFuYWdlcl9pZCI6MSwidXN1YXJpbyI6Imx1Y2FzIn0.EzD6PfbzzxkPGzWviYsbHslmo-wC4Gw-5LVNSDl8O7Y
 #
@@ -58,3 +58,4 @@ Authorization: Bearer {{token}}
    "user_id": 5,
    "grupamento_id":1
 }
+
