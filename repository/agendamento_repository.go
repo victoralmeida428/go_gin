@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"abramed_go/dto/dto_agendamento"
 	"abramed_go/model"
 	"database/sql"
 )
@@ -8,7 +9,6 @@ import (
 type AgendamentoRepository struct {
 	connection *sql.DB
 }
-
 
 func (repo *AgendamentoRepository) FindAll(user *model.User) ([]model.Agendamento, error) {
 	query := `
@@ -49,7 +49,7 @@ func (repo *AgendamentoRepository) FindAll(user *model.User) ([]model.Agendament
 	for result.Next() {
 		var agendamento model.Agendamento
 		err = result.Scan(
-			&agendamento.ID, 
+			&agendamento.ID,
 			&agendamento.Inicio,
 			&agendamento.Proximo,
 			&agendamento.Ativo,
@@ -73,4 +73,52 @@ func (repo *AgendamentoRepository) FindAll(user *model.User) ([]model.Agendament
 		agendamentos = append(agendamentos, agendamento)
 	}
 	return agendamentos, nil
+}
+
+func (repo *AgendamentoRepository) Insert(userId int, schedule dto_agendamento.CreateInput) error {
+	query := `
+		INSERT INTO indicadores.agendamento (versao_formulario_id, user_id, periodicidade_id, inicio, ativo, metodo_id)
+		VALUES ($1, $2, $3, $4, $5, $6)
+	`
+
+	tx, err := repo.connection.Begin()
+	if err != nil {
+		return err
+	}
+	args := []interface{}{schedule.Versao, userId, schedule.Periodicidade, schedule.Inicio, schedule.Ativo, schedule.Metodo}
+	_, err = tx.Exec(query, args...)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (repo *AgendamentoRepository) ListPeriodicity() ([]model.Periodicidade, error) {
+	query := `
+		SELECT
+			id, nome
+		FROM
+			indicadores.periodicidade
+		ORDER BY intervalo
+	`
+	results, err := repo.connection.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	periodos := make([]model.Periodicidade, 0)
+	for results.Next() {
+		var periodo model.Periodicidade
+		err := results.Scan(
+			&periodo.ID,
+			&periodo.Nome,
+		)
+		if err != nil {
+			return nil, err
+		}
+		periodos = append(periodos, periodo)
+	}
+	return periodos, nil
 }

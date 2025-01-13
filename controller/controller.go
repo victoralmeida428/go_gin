@@ -9,6 +9,7 @@ type Controller struct {
 	Form *formController
 	Variavel *variavelController
 	Agendamento *agendamentoController
+	Resposta *respostaController
 }
 
 func New(repo *repository.Repository) *Controller {
@@ -17,5 +18,6 @@ func New(repo *repository.Repository) *Controller {
 		Form: &formController{repo: repo},
 		Variavel: &variavelController{repo: repo},
 		Agendamento: &agendamentoController{repo: repo},
+		Resposta: &respostaController{repo: repo},
 	}
 }

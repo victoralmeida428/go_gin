@@ -22,19 +22,14 @@ type formController struct {
 // @Security BearerAuth
 // @Success 200 {object} []model.Formulario
 // @Router /form [get]
-func (fc *formController) List(ctx *gin.Context) {
-	forms, err := fc.repo.Formulario.FindAll()
+func (c *formController) List(ctx *gin.Context) {
+	forms, err := c.repo.Formulario.Query(0)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, forms)
 }
-
-type createResponse struct {
-	Message string `form:"message" json:"message" binding:"required"`
-}
-
 
 // @Summary Create Form
 // @Description Create a form
@@ -45,20 +40,39 @@ type createResponse struct {
 // @Param form body model.Formulario true "Input"
 // @Success 200 {object} createResponse
 // @Router /form [put]
-func (fc *formController) Create(ctx *gin.Context) {
+func (c *formController) Create(ctx *gin.Context) {
 	var form model.Formulario
 	if err := ctx.ShouldBindJSON(&form); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := fc.repo.Formulario.Insert(&form)
+	err := c.repo.Formulario.Insert(&form)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, createResponse{Message: "Formulario criado com sucesso"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Formulario criado com sucesso"})
 }
 
+func (c *formController) FindById(ctx *gin.Context){
+	id, exists := ctx.Params.Get("id")
+	if !exists {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message":"Id required"})
+		return
+	}
+	idInt, err := strconv.Atoi(id);
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	form, err := c.repo.Formulario.Query(idInt)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, form)
+
+}
 
 // @Summary Delete Form
 // @Description Delete Form
@@ -69,7 +83,7 @@ func (fc *formController) Create(ctx *gin.Context) {
 // @Param form body model.Formulario true "form"
 // @Success 200 {object} createResponse
 // @Router /form/{id} [delete]
-func (fc *formController) Delete(ctx *gin.Context) {
+func (c *formController) Delete(ctx *gin.Context) {
 	id, exists := ctx.Params.Get("id")
 	if !exists {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id não informado"})
@@ -81,15 +95,15 @@ func (fc *formController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	form, _ := fc.repo.Formulario.FindById(idInt)
+	form, _ := c.repo.Formulario.FindById(idInt)
 
 	
-	err = fc.repo.Formulario.Delete(idInt)
+	err = c.repo.Formulario.Delete(idInt)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, createResponse{Message: fmt.Sprintf("Formulario: %s Deletado com sucesso", form.Nome)})
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Formulario: %s Deletado com sucesso", form.Formulario.Nome)})
 }
 
 
@@ -101,7 +115,7 @@ func (fc *formController) Delete(ctx *gin.Context) {
 // @Param form body model.Formulario true "Input"
 // @Success 200 {object} createResponse
 // @Router /form [patch]
-func (fc *formController) Update(ctx *gin.Context) {
+func (c *formController) Update(ctx *gin.Context) {
 	type input struct {
 		ID int `json:"id" binding:"required"`
 		Ativo *bool `json:"ativo,omitempty"`
@@ -114,26 +128,35 @@ func (fc *formController) Update(ctx *gin.Context) {
 		return
 	}
 
-	form, err := fc.repo.Formulario.FindById(formInput.ID)
+	form, err := c.repo.Formulario.FindById(formInput.ID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	if formInput.Ativo != nil {
-		form.Ativo = *formInput.Ativo
+		form.Formulario.Ativo = *formInput.Ativo
 	}
 	if formInput.Nome != nil && *formInput.Nome != "" {
-		form.Nome = *formInput.Nome
+		form.Formulario.Nome = *formInput.Nome
 	}
 	if formInput.Descricao != nil && *formInput.Descricao != ""{
-		form.Descricao = *formInput.Descricao
+		form.Formulario.Descricao = *formInput.Descricao
 	}
 
-	_, err = fc.repo.Formulario.Update(&form)
+	_, err = c.repo.Formulario.Update(&form.Formulario)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, createResponse{Message: "Formulario Atualizado com sucesso"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Formulario Atualizado com sucesso"})
+}
+
+func (c *formController) ListMethods(ctx *gin.Context){
+	metodos, err := c.repo.Formulario.ListMethods()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, metodos)
 }

@@ -1,790 +1,1103 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "description": "Esta é a API de Indicadores.",
-        "title": "API de Indicadores",
-        "contact": {
-            "name": "Suporte",
-            "email": "analytics@controllab.com"
+  "components": {
+    "schemas": {
+      "Add Groups Input": {
+        "properties": {
+          "groups_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          }
         },
-        "version": "1.0"
+        "required": [
+          "groups_id",
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "Answer": {
+        "properties": {
+          "active": {
+            "example": true,
+            "type": "boolean"
+          },
+          "created_at": {
+            "example": "2025-01-10T11:32:20.624125Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "value": {
+            "example": 22.5,
+            "format": "float",
+            "type": "number"
+          },
+          "version": {
+            "example": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AnswerResponse": {
+        "properties": {
+          "answer": {
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            },
+            "type": "array"
+          },
+          "user": {
+            "properties": {
+              "first_name": {
+                "example": "victor",
+                "type": "string"
+              },
+              "id": {
+                "example": 1,
+                "type": "integer"
+              },
+              "last_name": {
+                "example": "gomes",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "variable": {
+            "properties": {
+              "id": {
+                "example": 11,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "Create Response": {
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Delete Groups Input": {
+        "properties": {
+          "groups_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "groups_id",
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "Enterprise": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "level": {
+            "$ref": "#/components/schemas/Level"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Form": {
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "active",
+          "name"
+        ],
+        "type": "object"
+      },
+      "FormVersion": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "form": {
+            "$ref": "#/components/schemas/Form"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "type": "object"
+      },
+      "Groups": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "Input Answer": {
+        "properties": {
+          "active": {
+            "description": "Se a resposta está ativa ou não",
+            "example": true,
+            "type": "boolean"
+          },
+          "schedule_id": {
+            "description": "ID do agendamento",
+            "example": 10,
+            "type": "integer"
+          },
+          "value": {
+            "description": "Valor da resposta",
+            "example": 22.5,
+            "format": "float",
+            "type": "number"
+          },
+          "variable_id": {
+            "description": "ID da variável relacionada à resposta",
+            "example": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "variable_id",
+          "schedule_id",
+          "value",
+          "active"
+        ],
+        "type": "object"
+      },
+      "Level": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nome": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Login Request": {
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object"
+      },
+      "Method": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Periodicity": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Schedule": {
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "method": {
+            "$ref": "#/components/schemas/Method"
+          },
+          "next": {
+            "type": "string"
+          },
+          "periodicity": {
+            "$ref": "#/components/schemas/Periodicity"
+          },
+          "start": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "version_form": {
+            "$ref": "#/components/schemas/FormVersion"
+          }
+        },
+        "type": "object"
+      },
+      "TypeVariable": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nome": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nome"
+        ],
+        "type": "object"
+      },
+      "User": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "enterprise": {
+            "$ref": "#/components/schemas/Enterprise"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/Groups"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "manager_id": {
+            "type": "integer"
+          },
+          "password": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "password",
+          "user"
+        ],
+        "type": "object"
+      },
+      "Variable": {
+        "properties": {
+          "data_type_id": {
+            "$ref": "#/components/schemas/TypeVariable"
+          },
+          "has_item": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "question_id": {
+            "type": "integer"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data_type_id",
+          "text"
+        ],
+        "type": "object"
+      }
     },
-    "servers": [
-        {
-            "url": "http://victor.controllab.com:8000/api/v1"
-        }
-    ],
-    "paths": {
-        "/form": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List all forms",
-                "tags": [
-                    "form"
-                ],
-                "summary": "List Forms",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Formulario"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Create a form",
-                "tags": [
-                    "form"
-                ],
-                "summary": "Create Form",
-                "parameters": [
-                    {
-                        "description": "Input",
-                        "name": "form",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/Formulario"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "tags": [
-                    "form"
-                ],
-                "summary": "Update Form",
-                "parameters": [
-                    {
-                        "description": "Input",
-                        "name": "form",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/Formulario"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/form/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Delete Form",
-                "tags": [
-                    "form"
-                ],
-                "summary": "Delete Form",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/schedule": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List all schedules",
-                "tags": [
-                    "schedules"
-                ],
-                "summary": "List Schedules",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Agendamento"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Return the logged-in user's data",
-                "tags": [
-                    "user"
-                ],
-                "summary": "User",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "members": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/User"
-                                            }
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user/create": {
-            "put": {
-                "description": "Create new user",
-                "tags": [
-                    "user"
-                ],
-                "summary": "Create user",
-                "parameters": [
-                    {
-                        "description": "Usuário",
-                        "name": "user",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user/groups": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Establishing the Relationship Between Users and Groups",
-                "tags": [
-                    "user"
-                ],
-                "summary": "Add groups",
-                "parameters": [
-                    {
-                        "description": "Input",
-                        "name": "login",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/AddGrupamentoInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Linking Users to Groups",
-                "tags": [
-                    "user"
-                ],
-                "summary": "Remove Groups",
-                "parameters": [
-                    {
-                        "description": "Input",
-                        "name": "login",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/DelGrupamentoInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user/login": {
-            "post": {
-                "description": "return JWT token",
-                "tags": [
-                    "user"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/loginRequest"
-                            }
-                        }
-                    }
-                },
-                "summary": "Login",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "token": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/variable": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List all variables",
-                "tags": [
-                    "variables"
-                ],
-                "summary": "List variables",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Variavel"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Create only one variable",
-                "tags": [
-                    "variables"
-                ],
-                "summary": "Create variable",
-                "parameters": [
-                    {
-                        "description": "Variable",
-                        "name": "user",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/Variavel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/variable/groups": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List all groups by user",
-                "tags": [
-                    "variables"
-                ],
-                "summary": "List Groups by user",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Grupamento"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "tags": [
-                    "variables"
-                ],
-                "summary": "Create groups",
-                "parameters": [
-                    {
-                        "description": "Groups",
-                        "name": "user",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/Grupamento"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/createResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/variable/tipo": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List all variables types",
-                "tags": [
-                    "variables"
-                ],
-                "summary": "List types",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/TipoVariavel"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "components": {
-        "securitySchemes": {
-            "BearerAuth": {
-                "type": "apiKey",
-                "name": "Authorization",
-                "in": "header"
-            }
-        },
-        "schemas": {
-            "AddGrupamentoInput": {
-                "type": "object",
-                "required": [
-                    "groups_id",
-                    "user_id"
-                ],
-                "properties": {
-                    "groups_id": {
-                        "type": "integer"
-                    },
-                    "user_id": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    }
-                }
-            },
-            "DelGrupamentoInput": {
-                "type": "object",
-                "required": [
-                    "groups_id",
-                    "user_id"
-                ],
-                "properties": {
-                    "groups_id": {
-                        "type": "integer"
-                    },
-                    "user_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "createResponse": {
-                "type": "object",
-                "required": [
-                    "message"
-                ],
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "loginRequest": {
-                "type": "object",
-                "required": [
-                    "password",
-                    "username"
-                ],
-                "properties": {
-                    "password": {
-                        "type": "string"
-                    },
-                    "username": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Agendamento": {
-                "type": "object",
-                "properties": {
-                    "active": {
-                        "type": "boolean"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "method": {
-                        "$ref": "#/components/schemas/Metodo"
-                    },
-                    "next": {
-                        "type": "string"
-                    },
-                    "periodicity": {
-                        "$ref": "#/components/schemas/Periodicidade"
-                    },
-                    "start": {
-                        "type": "string"
-                    },
-                    "user": {
-                        "$ref": "#/components/schemas/User"
-                    },
-                    "version_form": {
-                        "$ref": "#/components/schemas/VersaoFormulario"
-                    }
-                }
-            },
-            "Empresa": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "level": {
-                        "$ref": "#/components/schemas/Nivel"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Formulario": {
-                "type": "object",
-                "required": [
-                    "active",
-                    "name"
-                ],
-                "properties": {
-                    "active": {
-                        "type": "boolean"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Grupamento": {
-                "type": "object",
-                "required": [
-                    "name"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Metodo": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Nivel": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "nome": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Periodicidade": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "interval": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "TipoVariavel": {
-                "type": "object",
-                "required": [
-                    "nome"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "nome": {
-                        "type": "string"
-                    }
-                }
-            },
-            "User": {
-                "type": "object",
-                "required": [
-                    "first_name",
-                    "last_name",
-                    "password",
-                    "user"
-                ],
-                "properties": {
-                    "email": {
-                        "type": "string"
-                    },
-                    "enterprise": {
-                        "$ref": "#/components/schemas/Empresa"
-                    },
-                    "first_name": {
-                        "type": "string"
-                    },
-                    "groups": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Grupamento"
-                        }
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "last_name": {
-                        "type": "string"
-                    },
-                    "manager_id": {
-                        "type": "integer"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "user": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Variavel": {
-                "type": "object",
-                "required": [
-                    "data_type_id",
-                    "text"
-                ],
-                "properties": {
-                    "data_type_id": {
-                        "$ref": "#/components/schemas/TipoVariavel"
-                    },
-                    "has_item": {
-                        "type": "boolean"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "question_id": {
-                        "type": "integer"
-                    },
-                    "required": {
-                        "type": "boolean"
-                    },
-                    "text": {
-                        "type": "string"
-                    }
-                }
-            },
-            "VersaoFormulario": {
-                "type": "object",
-                "required": [
-                    "version"
-                ],
-                "properties": {
-                    "created_at": {
-                        "type": "string"
-                    },
-                    "form": {
-                        "$ref": "#/components/schemas/Formulario"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "version": {
-                        "type": "integer"
-                    }
-                }
-            }
-        }
+    "securitySchemes": {
+      "BearerAuth": {
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey"
+      }
     }
+  },
+  "info": {
+    "contact": {
+      "email": "analytics@controllab.com",
+      "name": "Suporte"
+    },
+    "description": "Esta é a API de Indicadores.",
+    "title": "API de Indicadores",
+    "version": "1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/answer": {
+      "get": {
+        "parameters": [
+          {
+            "allowEmptyValue": false,
+            "in": "query",
+            "name": "schedule_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AnswerResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List of answers"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get answers",
+        "tags": [
+          "answers"
+        ]
+      },
+      "post": {
+        "description": "Answer a variable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "input",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Input Answer"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "send data to provider"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Answer Variable",
+        "tags": [
+          "answers"
+        ]
+      }
+    },
+    "/form": {
+      "get": {
+        "description": "List all forms",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FormVersion"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Forms",
+        "tags": [
+          "form"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "description": "Input",
+            "in": "path",
+            "name": "form",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Form"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update Form",
+        "tags": [
+          "form"
+        ]
+      },
+      "put": {
+        "description": "Create a form",
+        "parameters": [
+          {
+            "description": "Input",
+            "in": "path",
+            "name": "form",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Form"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create Form",
+        "tags": [
+          "form"
+        ]
+      }
+    },
+    "/form/methods": {
+      "get": {
+        "description": "List all form's methods",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Method"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Methods",
+        "tags": [
+          "form"
+        ]
+      }
+    },
+    "/form/{id}": {
+      "delete": {
+        "description": "Delete Form",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete Form",
+        "tags": [
+          "form"
+        ]
+      },
+      "get": {
+        "description": "Get all form's version by form",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormVersion"
+                }
+              }
+            },
+            "description": "Ok"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get Forms by ID",
+        "tags": [
+          "form"
+        ]
+      }
+    },
+    "/schedule": {
+      "get": {
+        "description": "List all schedules",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Schedule"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Schedules",
+        "tags": [
+          "schedules"
+        ]
+      },
+      "put": {
+        "description": "Create one schedule",
+        "parameters": [
+          {
+            "description": "Schedule Input",
+            "in": "path",
+            "name": "schedule",
+            "required": true,
+            "schema": {
+              "properties": {
+                "active": {
+                  "example": true,
+                  "type": "boolean"
+                },
+                "method_id": {
+                  "example": "1",
+                  "type": "integer"
+                },
+                "periodicity_id": {
+                  "example": "1",
+                  "type": "integer"
+                },
+                "start": {
+                  "example": "2025-01-08T10:18:40.258691Z",
+                  "type": "string"
+                },
+                "version_form_id": {
+                  "example": "1",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Create Response"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create Schedule",
+        "tags": [
+          "schedules"
+        ]
+      }
+    },
+    "/schedule/periodicity": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "example": 1,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "example": "semanal",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Ok"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Periodicities",
+        "tags": [
+          "schedules"
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "Return the logged-in user's data",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "members": {
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      },
+                      "type": "array"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "User",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/create": {
+      "put": {
+        "description": "Create new user",
+        "parameters": [
+          {
+            "description": "Users",
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Create user",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/groups": {
+      "delete": {
+        "description": "Linking Users to Groups",
+        "parameters": [
+          {
+            "description": "Input",
+            "in": "path",
+            "name": "login",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Delete Groups Input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Remove Groups",
+        "tags": [
+          "user"
+        ]
+      },
+      "post": {
+        "description": "Establishing the Relationship Between Users and Groups",
+        "parameters": [
+          {
+            "description": "Input",
+            "in": "path",
+            "name": "login",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Add Groups Input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Add groups",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "description": "return JWT token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/variable": {
+      "get": {
+        "description": "List all variables",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Variable"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List variables",
+        "tags": [
+          "variables"
+        ]
+      },
+      "put": {
+        "description": "Create only one variable",
+        "parameters": [
+          {
+            "description": "Variable",
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Variable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create variable",
+        "tags": [
+          "variables"
+        ]
+      }
+    },
+    "/variable/groups": {
+      "get": {
+        "description": "List all groups by user",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Groups"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Groups by user",
+        "tags": [
+          "variables"
+        ]
+      },
+      "put": {
+        "parameters": [
+          {
+            "description": "Groups",
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Groups"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create Response"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create groups",
+        "tags": [
+          "variables"
+        ]
+      }
+    },
+    "/variable/type": {
+      "get": {
+        "description": "List all variables types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVariable"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List types",
+        "tags": [
+          "variables"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://victor.controllab.com:8000/api/v1"
+    }
+  ]
 }

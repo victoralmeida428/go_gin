@@ -13,5 +13,17 @@ func agendamentoRoutes(ctl *controller.Controller) []Route {
 			Handler: ctl.Agendamento.ListAll,
 			Auth:    true,
 		},
+		{
+			Path:    "/schedule",
+			Method:  http.MethodPut,
+			Handler: ctl.Agendamento.Create,
+			Auth:    true,
+		},
+		{
+			Path:    "/schedule/periodicity",
+			Method:  http.MethodGet,
+			Handler: ctl.Agendamento.ListPeriodicity,
+			Auth:    true,
+		},
 	}
 }

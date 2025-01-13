@@ -26,9 +26,21 @@ func formRoutes(ctl *controller.Controller) []Route {
 			Auth: true,
 		},
 		{
+			Path: "/form/:id",
+			Method: http.MethodGet,
+			Handler: ctl.Form.FindById,
+			Auth: true,
+		},
+		{
 			Path: "/form",
 			Method: http.MethodPatch,
 			Handler: ctl.Form.Update,
+			Auth: true,
+		},
+		{
+			Path: "/form/methods",
+			Method: http.MethodGet,
+			Handler: ctl.Form.ListMethods,
 			Auth: true,
 		},
 	}

@@ -3,21 +3,21 @@ package model
 import "time"
 
 type Variavel struct {
-	ID           int          `json:"id"`
-	TipoVariavel TipoVariavel `json:"data_type_id" binding:"required"`
+	ID           int          `json:"id,omitempty"`
+	TipoVariavel *TipoVariavel `json:"data_type,omitempty" binding:"required"`
 	PerguntaId   *int         `json:"question_id,omitempty"`
-	PossuiItem   bool         `json:"has_item"`
-	Obrigatorio  bool         `json:"required"`
-	Texto        string       `json:"text" binding:"required"`
+	PossuiItem   bool         `json:"has_item,omitempty"`
+	Obrigatorio  bool         `json:"required,omitempty"`
+	Texto        string       `json:"text,omitempty" binding:"required"`
 }
 
 type ViewVariavel struct {
-	ID           int          `json:"id"`
-	TipoVariavel TipoVariavel `json:"data_type_id" binding:"required"`
+	ID           int          `json:"id,omitempty"`
+	TipoVariavel TipoVariavel `json:"data_type,omitempty" binding:"required"`
 	Pergunta     string      `json:"question,omitempty"`
 	Item         *string      `json:"item,omitempty"`
-	PossuiItem   bool         `json:"has_item"`
-	Obrigatorio  bool         `json:"required"`
+	PossuiItem   bool         `json:"has_item,omitempty"`
+	Obrigatorio  bool         `json:"required,omitempty"`
 }
 
 type TipoVariavel struct {

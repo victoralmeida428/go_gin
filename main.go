@@ -3,7 +3,7 @@ package main
 import (
 	"abramed_go/controller"
 	"abramed_go/db"
-	_ "abramed_go/docs"
+	"abramed_go/helpers"
 	"abramed_go/middlewares"
 	"abramed_go/repository"
 	"abramed_go/routes"
@@ -42,22 +42,12 @@ func init() {
 	flag.StringVar(&HOST, "host", "victor.controllab.com", "Porta para rodar o servidor")
 	flag.IntVar(&PORT, "port", 8000, "Porta para rodar o servidor")
 	flag.Parse()
+
+	if err := helpers.UpdateJson(fmt.Sprintf("http://%s:%d/api/v1", HOST, PORT)); err != nil {
+		panic(err)
+	}
 }
 
-// @title API de Indicadores
-// @version 1.0
-// @description Esta é a API de Indicadores.
-// @contact.name Suporte
-// @contact.email analytics@controllab.com
-// @license.name MIT
-
-// @BasePath /api/v1 
-// @schemes http https
-// @host victor.controllab.com:8000
-
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
 func main() {
 	r := gin.Default()
 	r.SetTrustedProxies([]string{"127.0.0.1", "victor.controllab.com"})

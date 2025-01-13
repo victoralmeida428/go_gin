@@ -82,4 +82,11 @@ VALUES
 INSERT INTO indicadores.empresa (nome, nivel_id)
 VALUES ('Controllab', 3);
 
+INSERT INTO indicadores.metodo (nome, intervalo)
+VALUES ('Semanal', "7 days"),
+VALUES ('Mensal', "1 mon"),
+VALUES ('Trimestral', "3 mons"),
+VALUES ('Semestral', "6 mons"),
+VALUES ('Anual', "1 year");
+
 commit;

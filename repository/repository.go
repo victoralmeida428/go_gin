@@ -9,6 +9,7 @@ type Repository struct {
 	Formulario *FormularioRepository
 	Variavel   *VariavelRepository
 	Agendamento *AgendamentoRepository
+	Resposta *RespostaRepository
 }
 
 func New(db *sql.DB) *Repository {
@@ -17,6 +18,8 @@ func New(db *sql.DB) *Repository {
 		Formulario: &FormularioRepository{connection: db},
 		Variavel:   &VariavelRepository{connection: db},
 		Agendamento: &AgendamentoRepository{connection: db},
+		Resposta: &RespostaRepository{connection: db},
+		
 	}
 
 }

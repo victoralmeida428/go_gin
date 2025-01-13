@@ -1,9 +1,26 @@
 ### CONSTANTES
 @baseUrl = http://victor.controllab.com:8000/api/v1
 # @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTk5NDgxMCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Po0x0Aa5Oo-Idx54VgUo95g-Sgp239hkvK_rsOi9tg0
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjQzMTU4NCwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.BHS3awHTDlOwW_vKCSzaUumEHPNzOCYwb5YAeZzBuIM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjUxMDQ4MywiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.wqZlgsQNbKZlT7ZraKvNrBhtT1HwJoVbvwu7jz1FLu0
 
 
 ### Listar Agendamentos
 GET {{baseUrl}}/schedule
+Authorization: Bearer {{token}}
+
+
+### Criar Agendamentos
+PUT {{baseUrl}}/schedule
+Authorization: Bearer {{token}}
+
+{
+  "version_form_id": 1,
+  "periodicity_id": 1,
+  "start": "2025-01-08T10:18:40.258691Z",
+  "active": true,
+  "method_id": 1
+}
+
+### Listar periodicidades
+GET {{baseUrl}}/schedule/periodicity
 Authorization: Bearer {{token}}

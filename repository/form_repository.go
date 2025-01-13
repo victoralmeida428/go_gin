@@ -10,22 +10,31 @@ type FormularioRepository struct {
 	connection *sql.DB
 }
 
-func (form *FormularioRepository) FindAll() ([]model.Formulario, error) {
+func (form *FormularioRepository) Query(idForm int) ([]model.VersaoFormulario, error) {
 	query := `
-	SELECT id, nome, descricao, ativo
-	FROM indicadores.formulario
-	JOIN indicadores.versao_formulario vf ON vf.formulario_id = id
-	JOIN indicadores.
+	SELECT f.id, nome, descricao, ativo, vf.id id_versao, criado_em, versao
+	FROM indicadores.formulario f
+	JOIN indicadores.versao_formulario vf ON vf.formulario_id = f.id
+	WHERE 
+	(f.id = $1 OR $1 = 0)
+
 	`
-	rows, err := form.connection.Query(query)
+	rows, err := form.connection.Query(query, idForm)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var formularios []model.Formulario
+	var formularios []model.VersaoFormulario
 	for rows.Next() {
-		var formulario model.Formulario
-		if err = rows.Scan(&formulario.ID, &formulario.Nome, &formulario.Descricao, &formulario.Ativo); err != nil {
+		var formulario model.VersaoFormulario
+		if err = rows.Scan(
+			&formulario.Formulario.ID, 
+			&formulario.Formulario.Nome, 
+			&formulario.Formulario.Descricao, 
+			&formulario.Formulario.Ativo, 
+			&formulario.ID, 
+			&formulario.CriadoEm, 
+			&formulario.Versao); err != nil {
 			return nil, err
 		}
 		formularios = append(formularios, formulario)
@@ -33,23 +42,27 @@ func (form *FormularioRepository) FindAll() ([]model.Formulario, error) {
 	return formularios, nil
 }
 
-func (form *FormularioRepository) FindById(id int) (model.Formulario, error) {
+func (form *FormularioRepository) FindById(id int) (*model.VersaoFormulario, error) {
 	query := `
-	SELECT id, nome, descricao, ativo
-	FROM indicadores.formulario
-	where id = $1
+	SELECT f.id, nome, descricao, ativo, vf.id id_versao, criado_em, versao
+	FROM indicadores.formulario f
+	JOIN indicadores.versao_formulario vf ON vf.formulario_id = f.id
+	WHERE f.id=$1
 	`
-	var formulario model.Formulario
-	rows, err := form.connection.Query(query, id)
+
+	var formulario model.VersaoFormulario
+	err := form.connection.QueryRow(query, id).Scan(
+		&formulario.Formulario.ID, 
+		&formulario.Formulario.Nome, 
+		&formulario.Formulario.Descricao, 
+		&formulario.Formulario.Ativo, 
+		&formulario.ID, 
+		&formulario.CriadoEm, 
+		&formulario.Versao)
 	if err != nil {
-		return formulario, err
+		return nil, err
 	}
-	for rows.Next() {
-		if err = rows.Scan(&formulario.ID, &formulario.Nome, &formulario.Descricao, &formulario.Ativo); err != nil {
-			return formulario, err
-		}
-	}
-	return formulario, nil
+	return &formulario, nil
 }
 
 func (form *FormularioRepository) Update(formulario *model.Formulario) (*model.Formulario, error) {
@@ -158,4 +171,29 @@ func (form *FormularioRepository) Delete(id int) error {
 
 	tx.Commit()
 	return nil 
+}
+
+func (form *FormularioRepository) ListMethods() ([]model.Metodo, error) {
+	query := `
+	SELECT id, nome FROM indicadores.metodo
+	`
+
+	results, err := form.connection.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	metodos := make([]model.Metodo, 0)
+	for results.Next(){
+		var metodo model.Metodo
+		err := results.Scan(
+			&metodo.ID,
+			&metodo.Nome,
+		)
+		if err != nil {
+			return nil, err
+		}
+		metodos = append(metodos, metodo)
+	}
+	return metodos, nil
 }

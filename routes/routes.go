@@ -18,6 +18,7 @@ func GenerateRouter(c *controller.Controller, r *gin.Engine) {
 	paths = append(paths, formRoutes(c)...)
 	paths = append(paths, variaveisRoutes(c)...)
 	paths = append(paths, agendamentoRoutes(c)...)
+	paths = append(paths, respsotasRoutes(c)...)
 	root := "/api/v1"
 	for _, path := range paths {
 		if path.Auth {
