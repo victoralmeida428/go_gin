@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS indicadores.grupamento_usuario

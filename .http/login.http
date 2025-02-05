@@ -1,18 +1,19 @@
 
 @baseUrl = http://victor.controllab.com:8000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjQ0MDQ1MSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.wLFQbbzrdafvLP3mSHKIvj38eDleoafcma_m5w6h4to
-# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoxLCJleHAiOjE3MzYyNzg3OTcsImlkIjoyLCJtYW5hZ2VyX2lkIjoxLCJ1c3VhcmlvIjoiYnJ1bm8ifQ.QugDQGFv_Gkf2yZseZmofzC2ifyZSx86c3_7dYxD9ZE
-# @token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzQGVtYWlsLmNvbSIsImVtcHJlc2EiOiJjb250cm9sbGFiIiwiZXhwIjoxNzM2MDEyNjQzLCJpZCI6NywibWFuYWdlcl9pZCI6MSwidXN1YXJpbyI6Imx1Y2FzIn0.EzD6PfbzzxkPGzWviYsbHslmo-wC4Gw-5LVNSDl8O7Y
-#
+
 
 POST {{baseUrl}}/user/login
 Content-Type: application/json
 Origin: http://rafaeld-gse.controllab.com:3000/
+X-Forwarded-For: 101.124.54
 
 {
     "username": "victor",
     "password": "victor"
 }
+> {%
+    client.global.set("token", response.body.token);
+%}
 
 ### list
 GET {{baseUrl}}/user
@@ -26,13 +27,11 @@ Content-Type: application/json
 PUT {{baseUrl}}/user/create
 
 {
-    "usuario": "luiza",
-    "senha": "luiza",
-    "email": "luiza@email.com",
-    "first_name": "luiza",
-    "last_name": "costa",
-    "empresa_id": 1,
-    "manager_id": 1
+    "user": "bp",
+    "password": "bp",
+    "email": "bp@email.com",
+    "name": "bp",
+    "enterprise_id": 1
 }
 
 ### list

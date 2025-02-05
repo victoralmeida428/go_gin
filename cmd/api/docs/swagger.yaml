@@ -1,0 +1,525 @@
+basePath: /api/v1
+definitions:
+  controller.AddGrupamentoInput:
+    properties:
+      groups_id:
+        type: integer
+      user_id:
+        items:
+          type: integer
+        type: array
+    required:
+    - groups_id
+    - user_id
+    type: object
+  controller.DelGrupamentoInput:
+    properties:
+      groups_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - groups_id
+    - user_id
+    type: object
+  controller.createResponse:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  controller.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controller.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  model.Agendamento:
+    properties:
+      active:
+        type: boolean
+      id:
+        type: integer
+      method:
+        $ref: '#/definitions/model.Metodo'
+      next:
+        type: string
+      periodicity:
+        $ref: '#/definitions/model.Periodicidade'
+      start:
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+      version_form:
+        $ref: '#/definitions/model.VersaoFormulario'
+    type: object
+  model.Empresa:
+    properties:
+      id:
+        type: integer
+      level:
+        $ref: '#/definitions/model.Nivel'
+      name:
+        type: string
+    type: object
+  model.Formulario:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - active
+    - name
+    type: object
+  model.Grupamento:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  model.Metodo:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.Nivel:
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+    type: object
+  model.Periodicidade:
+    properties:
+      id:
+        type: integer
+      interval:
+        type: string
+      name:
+        type: string
+    type: object
+  model.TipoVariavel:
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+    required:
+    - nome
+    type: object
+  model.User:
+    properties:
+      email:
+        type: string
+      enterprise:
+        $ref: '#/definitions/model.Empresa'
+      first_name:
+        type: string
+      groups:
+        items:
+          $ref: '#/definitions/model.Grupamento'
+        type: array
+      id:
+        type: integer
+      last_name:
+        type: string
+      manager_id:
+        type: integer
+      password:
+        type: string
+      user:
+        type: string
+    required:
+    - first_name
+    - last_name
+    - password
+    - user
+    type: object
+  model.Variavel:
+    properties:
+      data_type_id:
+        $ref: '#/definitions/model.TipoVariavel'
+      has_item:
+        type: boolean
+      id:
+        type: integer
+      question_id:
+        type: integer
+      required:
+        type: boolean
+      text:
+        type: string
+    required:
+    - data_type_id
+    - text
+    type: object
+  model.VersaoFormulario:
+    properties:
+      created_at:
+        type: string
+      form:
+        $ref: '#/definitions/model.Formulario'
+      id:
+        type: integer
+      version:
+        type: integer
+    required:
+    - version
+    type: object
+host: victor.controllab.com:8000
+info:
+  contact:
+    email: analytics@controllab.com
+    name: Suporte
+  description: Esta é a API de Indicadores.
+  license:
+    name: MIT
+  title: API de Indicadores
+  version: "1.0"
+paths:
+  /form:
+    get:
+      consumes:
+      - application/json
+      description: List all forms
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Formulario'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List Forms
+      tags:
+      - form
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Input
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Form
+      tags:
+      - form
+    put:
+      consumes:
+      - application/json
+      description: Create a form
+      parameters:
+      - description: Input
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Create Form
+      tags:
+      - form
+  /form/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Form
+      parameters:
+      - description: form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/model.Formulario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Form
+      tags:
+      - form
+  /schedule:
+    get:
+      consumes:
+      - application/json
+      description: List all schedules
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Agendamento'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List Schedules
+      tags:
+      - schedules
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Return the logged-in user's data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      security:
+      - BearerAuth: []
+      summary: User
+      tags:
+      - user
+  /user/create:
+    put:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: Usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Create user
+      tags:
+      - user
+  /user/groups:
+    delete:
+      consumes:
+      - application/json
+      description: Linking Users to Groups
+      parameters:
+      - description: Input
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.DelGrupamentoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove Groups
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Establishing the Relationship Between Users and Groups
+      parameters:
+      - description: Input
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AddGrupamentoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Add groups
+      tags:
+      - user
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: return JWT token
+      parameters:
+      - description: Input
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controller.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.loginResponse'
+      summary: Login
+      tags:
+      - user
+  /variable:
+    get:
+      consumes:
+      - application/json
+      description: List all variables
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Variavel'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List variables
+      tags:
+      - variables
+    put:
+      consumes:
+      - application/json
+      description: Create only one variable
+      parameters:
+      - description: Variable
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Variavel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Create variable
+      tags:
+      - variables
+  /variable/groups:
+    get:
+      consumes:
+      - application/json
+      description: List all groups by user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Grupamento'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List Groups by user
+      tags:
+      - variables
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Groups
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Grupamento'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.createResponse'
+      security:
+      - BearerAuth: []
+      summary: Create groups
+      tags:
+      - variables
+  /variable/tipo:
+    get:
+      consumes:
+      - application/json
+      description: List all variables types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.TipoVariavel'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List types
+      tags:
+      - variables
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

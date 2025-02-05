@@ -1,0 +1,25 @@
+services:
+  abramed_backend:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - /home/victorgomes/Área de Trabalho/projetos/abramed_go:/opt/data
+    environment:
+      - DB_HOST=db
+    env_file:
+      - ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  db:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    hostname: db
+

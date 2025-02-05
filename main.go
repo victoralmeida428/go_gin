@@ -1,12 +1,12 @@
 package main
 
 import (
-	"abramed_go/controller"
-	"abramed_go/db"
-	"abramed_go/helpers"
-	"abramed_go/middlewares"
-	"abramed_go/repository"
-	"abramed_go/routes"
+	"abramed_go/cmd/api/controller"
+	"abramed_go/cmd/api/db"
+	"abramed_go/cmd/api/helpers"
+	"abramed_go/cmd/api/middlewares"
+	"abramed_go/cmd/api/repository"
+	"abramed_go/cmd/api/routes"
 	"flag"
 	"fmt"
 	"os"
@@ -15,10 +15,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type User struct {
-	Nome     string `json:"nome" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
 
 var (
 	PORT int
@@ -60,15 +56,16 @@ func main() {
 	controller := controller.New(repository)
 
 	//static files
-	r.Static("/swagger-ui","./docs/swagger-ui")
-	r.StaticFile("/swagger/doc.json","./docs/swagger.json")
+	r.Static("/swagger-ui","./cmd/api/docs/swagger-ui")
+	r.StaticFile("/swagger/doc.json","./cmd/api/docs/swagger.json")
 
 	
 	r.GET("/swagger", func (c *gin.Context){
-		c.File("./docs/index.html")
+		c.File("./cmd/api/docs/index.html")
 	})
 	
 	r.Use(middlewares.CorsMiddleware)
+
 	routes.GenerateRouter(controller, r)
 	
 	

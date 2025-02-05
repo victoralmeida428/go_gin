@@ -1,7 +1,5 @@
 ### CONSTANTES
 @baseUrl = http://victor.controllab.com:8000/api/v1
-# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckBlbWFpbC5jb20iLCJlbXByZXNhIjoiY29udHJvbGxhYiIsImV4cCI6MTczNTk5NDgxMCwiaWQiOjEsIm1hbmFnZXJfaWQiOjAsInVzdWFyaW8iOiJ2aWN0b3IifQ.Po0x0Aa5Oo-Idx54VgUo95g-Sgp239hkvK_rsOi9tg0
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTczNjYwMzgxMSwiaWQiOjEsInVzdWFyaW8iOiJ2aWN0b3IifQ.C3c5IRw5jZw7bSuKFe7nvB3p1tDekJydcRXgFj5mgUs
 
 
 ### tipos
@@ -53,7 +51,7 @@ Authorization: Bearer {{token}}
 {
   "variable_id": 12,
   "schedule_id": 1,
-  "value":60,
+  "value":0,
   "active": true
 }
 

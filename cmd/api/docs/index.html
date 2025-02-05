@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Controllab :: REST API</title>
+  <link rel="shortcut icon" href="http://intranet.controllab.com/qualicheck/public/imgci/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui.css">
+  <link rel="stylesheet" type="text/css" href="/swagger-ui/style.css">
+</head>
+
+<body>
+  <header>
+    <a id="logo">
+      <img style="width: 130px; height: auto" src="/swagger-ui/logo_controllab.svg" alt="logo">
+    </a>
+  </header>
+  <div id="swagger-ui">
+    <div class="topbar">
+      <!-- Substitui a logo padrão -->
+      <img src="/swagger-ui/logo.png" alt="Logo" style="height: 40px; margin-left: 10px;">
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui-bundle.js"></script>
+  <script>
+    const ui = SwaggerUIBundle({
+      url: "/swagger/doc.json",
+      dom_id: "#swagger-ui",
+      presets: [SwaggerUIBundle.presets.apis],
+      layout: "BaseLayout"
+    })
+  </script>
+</body>
+
+</html>
